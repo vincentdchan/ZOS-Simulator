@@ -2048,6 +2048,10 @@ react-dom@^15.6.1:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
+react-winjs@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/react-winjs/-/react-winjs-2.5.0.tgz#b4da5e1d227f3edee848f2d503c771e43c11379e"
+
 react@^15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react/-/react-15.6.1.tgz#baa8434ec6780bde997cdc380b79cd33b96393df"

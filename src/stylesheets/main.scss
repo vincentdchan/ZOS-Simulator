@@ -7,6 +7,12 @@
     user-select: none;
 }
 
+.glowing-border {
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 20px #49afff;
+}
+
 .window {
     position: fixed;
     background-color: white;
@@ -23,6 +29,7 @@
             font-size: 14px;
             color: black;
             margin: 0px;
+            cursor: default;
         }
     }
 

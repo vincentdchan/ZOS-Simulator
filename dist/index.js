@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -85,7 +85,9 @@ module.exports = ReactDOM;
 "use strict";
 
 
-var _Window = __webpack_require__(4);
+var _WindowsManager = __webpack_require__(6);
+
+var _Window = __webpack_require__(5);
 
 var _react = __webpack_require__(0);
 
@@ -97,7 +99,7 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _require = __webpack_require__(3),
+var _require = __webpack_require__(4),
     VirtualLine = _require.VirtualLine;
 
 var measure_font = "船";
@@ -164,21 +166,70 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     tick();
 
-    var _zIndex = 0;
-    function zIndexCounter() {
-        return _zIndex++;
-    }
+    var wm = new _WindowsManager.WindowsManager();
 
     _reactDom2.default.render(_react2.default.createElement(
         "div",
         null,
-        _react2.default.createElement(_Window.Window, { titleName: "Untitled", zIndexCounter: zIndexCounter }),
-        _react2.default.createElement(_Window.Window, { titleName: "Untitled 2", zIndexCounter: zIndexCounter })
+        _react2.default.createElement(_Window.Window, {
+            titleName: "Untitled",
+            windowsManager: wm }),
+        _react2.default.createElement(_Window.Window, {
+            titleName: "Untitled 2",
+            windowsManager: wm })
     ), document.getElementById('world'));
 });
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Emitter = exports.Emitter = function () {
+    function Emitter() {
+        _classCallCheck(this, Emitter);
+
+        this._map = {};
+    }
+
+    _createClass(Emitter, [{
+        key: "addEventListener",
+        value: function addEventListener(name, callback) {
+            if (name in this._map) {
+                this._map[name].push(callback);
+            } else {
+                this._map[name] = [callback];
+            }
+        }
+    }, {
+        key: "emit",
+        value: function emit() {
+            var args = Array.prototype.slice.call(arguments);
+            var name = args[0];
+            args = args.slice(1);
+            if (name in this._map) {
+                this._map[name].forEach(function (v) {
+                    return v.apply(undefined, args);
+                });
+            }
+        }
+    }]);
+
+    return Emitter;
+}();
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -285,7 +336,7 @@ var VirtualLine = exports.VirtualLine = function () {
 }();
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -306,7 +357,7 @@ var _reactDom = __webpack_require__(1);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _main = __webpack_require__(7);
+var _main = __webpack_require__(9);
 
 var _main2 = _interopRequireDefault(_main);
 
@@ -357,25 +408,49 @@ var Window = exports.Window = function (_React$Component2) {
     function Window(props) {
         _classCallCheck(this, Window);
 
-        var _this2 = _possibleConstructorReturn(this, (Window.__proto__ || Object.getPrototypeOf(Window)).call(this));
+        var _this2 = _possibleConstructorReturn(this, (Window.__proto__ || Object.getPrototypeOf(Window)).call(this, props));
 
         _this2.titleBarPressed = false;
-        _this2.zIndexCounter = props.zIndexCounter;
+
+        _this2.windowsManager = props.windowsManager;
+        _this2.windowsID = _this2.windowsManager.GetNewId();
+        _this2.windowsManager.addEventListener("focusedWindowChanged", function (id) {
+            if (id === _this2.windowsID) {
+                _this2.focus();
+            } else {
+                _this2.unfocus();
+            }
+        });
+        window.addEventListener("mousemove", function (event) {
+            return _this2.onMouseMove(event);
+        });
+
         _this2.state = {
             x: 16,
             y: 16,
             width: 400,
             height: 300,
-            zIndex: _this2.zIndexCounter()
+            zIndex: _this2.windowsManager.zIndexCounter(),
+            focused: false
         };
-
-        window.addEventListener("mousemove", function (event) {
-            return _this2.onMouseMove(event);
-        });
         return _this2;
     }
 
     _createClass(Window, [{
+        key: "focus",
+        value: function focus() {
+            this.setState({
+                focused: true
+            });
+        }
+    }, {
+        key: "unfocus",
+        value: function unfocus() {
+            this.setState({
+                focused: false
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
             var myStyle = {
@@ -385,13 +460,27 @@ var Window = exports.Window = function (_React$Component2) {
                 height: this.state.height + "px",
                 zIndex: this.state.zIndex
             };
+            var classList = "window";
+            if (this.state.focused) {
+                classList += " glowing-border";
+            }
             return _react2.default.createElement(
                 "div",
-                { className: "window", style: myStyle },
+                { className: classList, style: myStyle, onMouseDown: this.onMouseDown.bind(this) },
                 _react2.default.createElement(TitleBar, { name: this.props.titleName,
                     onMouseUp: this.onTitleBarMouseUp.bind(this),
-                    onMouseDown: this.onTitleBarMouseDown.bind(this) })
+                    onMouseDown: this.onTitleBarMouseDown.bind(this) }),
+                _react2.default.createElement(
+                    "div",
+                    null,
+                    this.props.children
+                )
             );
+        }
+    }, {
+        key: "onMouseDown",
+        value: function onMouseDown(event) {
+            this.windowsManager.FocusWindow(this.windowsID);
         }
     }, {
         key: "onMouseMove",
@@ -417,7 +506,7 @@ var Window = exports.Window = function (_React$Component2) {
             };
 
             this.setState({
-                zIndex: this.zIndexCounter()
+                zIndex: this.windowsManager.zIndexCounter()
             });
         }
     }, {
@@ -431,21 +520,87 @@ var Window = exports.Window = function (_React$Component2) {
 }(_react2.default.Component);
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(undefined);
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.WindowsManager = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Emitter2 = __webpack_require__(3);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var WindowsManager = exports.WindowsManager = function (_Emitter) {
+    _inherits(WindowsManager, _Emitter);
+
+    function WindowsManager() {
+        _classCallCheck(this, WindowsManager);
+
+        var _this = _possibleConstructorReturn(this, (WindowsManager.__proto__ || Object.getPrototypeOf(WindowsManager)).call(this));
+
+        _this._id_counter = 0;
+        _this._focused_id = 0;
+
+        var zIndex = 0;
+        _this.zIndexCounter = function () {
+            return zIndex++;
+        };
+        return _this;
+    }
+
+    _createClass(WindowsManager, [{
+        key: "GetZIndexCounter",
+        value: function GetZIndexCounter() {
+            return this.zIndexCounter;
+        }
+    }, {
+        key: "FocusWindow",
+        value: function FocusWindow(id) {
+            this._focused_id = id;
+            this.emit("focusedWindowChanged", id);
+        }
+    }, {
+        key: "GetFocusedId",
+        value: function GetFocusedId() {
+            return this._focused_id;
+        }
+    }, {
+        key: "GetNewId",
+        value: function GetNewId() {
+            return this._id_counter++;
+        }
+    }]);
+
+    return WindowsManager;
+}(_Emitter2.Emitter);
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(8)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, ".unselectable {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none; }\n\n.window {\n  position: fixed;\n  background-color: white;\n  border-style: solid;\n  border-width: 2px;\n  border-color: white; }\n  .window .titleBar {\n    width: 100%;\n    background-color: lightblue;\n    height: 16px; }\n    .window .titleBar .name {\n      font-size: 14px;\n      color: black;\n      margin: 0px; }\n  .window .right {\n    position: absolute;\n    right: 0px;\n    font-size: 14px; }\n  .window .right:hover {\n    background-color: white;\n    color: lightblue; }\n", ""]);
+exports.push([module.i, ".unselectable {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none; }\n\n.glowing-border {\n  outline: none;\n  border-color: #9ecaed;\n  box-shadow: 0 0 20px #49afff; }\n\n.window {\n  position: fixed;\n  background-color: white;\n  border-style: solid;\n  border-width: 2px;\n  border-color: white; }\n  .window .titleBar {\n    width: 100%;\n    background-color: lightblue;\n    height: 16px; }\n    .window .titleBar .name {\n      font-size: 14px;\n      color: black;\n      margin: 0px;\n      cursor: default; }\n  .window .right {\n    position: absolute;\n    right: 0px;\n    font-size: 14px; }\n  .window .right:hover {\n    background-color: white;\n    color: lightblue; }\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports) {
 
 /*
@@ -527,13 +682,13 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(5);
+var content = __webpack_require__(7);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -541,7 +696,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(8)(content, options);
+var update = __webpack_require__(10)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -558,7 +713,7 @@ if(false) {
 }
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -604,7 +759,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(9);
+var	fixUrls = __webpack_require__(11);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -917,7 +1072,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports) {
 
 
@@ -1012,7 +1167,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(2);

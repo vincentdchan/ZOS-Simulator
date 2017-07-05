@@ -19,19 +19,41 @@ class TitleBar extends React.Component {
 export class Window extends React.Component {
 
     constructor(props) {
-        super();
+        super(props);
 
         this.titleBarPressed = false;
-        this.zIndexCounter = props.zIndexCounter;
+
+        this.windowsManager = props.windowsManager;
+        this.windowsID = this.windowsManager.GetNewId();
+        this.windowsManager.addEventListener("focusedWindowChanged", (id) => {
+            if (id === this.windowsID) {
+                this.focus();
+            } else {
+                this.unfocus();
+            }
+        });
+        window.addEventListener("mousemove", (event) => this.onMouseMove(event));
+
         this.state = {
             x: 16,
             y: 16,
             width: 400,
             height: 300,
-            zIndex: this.zIndexCounter(),
+            zIndex: this.windowsManager.zIndexCounter(),
+            focused: false,
         };
+    }
 
-        window.addEventListener("mousemove", (event) => this.onMouseMove(event));
+    focus() {
+        this.setState({
+            focused: true
+        });
+    }
+
+    unfocus() {
+        this.setState({
+            focused: false
+        });
     }
 
     render() {
@@ -42,11 +64,20 @@ export class Window extends React.Component {
             height: this.state.height + "px",
             zIndex: this.state.zIndex,
         };
-        return <div className="window" style={myStyle}>
+        let classList = "window";
+        if (this.state.focused) {
+            classList += " glowing-border";
+        }
+        return <div className={classList} style={myStyle} onMouseDown={this.onMouseDown.bind(this)}>
             <TitleBar name={this.props.titleName}
             onMouseUp={this.onTitleBarMouseUp.bind(this)} 
             onMouseDown={this.onTitleBarMouseDown.bind(this)}  />
+            <div>{ this.props.children }</div>
         </div>
+    }
+
+    onMouseDown(event) {
+        this.windowsManager.FocusWindow(this.windowsID);
     }
 
     onMouseMove(event) {
@@ -70,7 +101,7 @@ export class Window extends React.Component {
         };
 
         this.setState({
-            zIndex: this.zIndexCounter(),
+            zIndex: this.windowsManager.zIndexCounter(),
         });
     }
 

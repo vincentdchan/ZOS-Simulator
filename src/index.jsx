@@ -1,4 +1,5 @@
 const {VirtualLine}  = require("./VirtualLine.js")
+import {WindowsManager} from "./Windows/WindowsManager.js"
 import {Window} from "./Windows/Window.jsx"
 import React from "react"
 import ReactDOM from 'react-dom'
@@ -67,15 +68,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     tick();
 
-    let _zIndex = 0;
-    function zIndexCounter() {
-        return _zIndex++;
-    }
+    let wm = new WindowsManager();
 
     ReactDOM.render(<div>
-        <Window titleName="Untitled" zIndexCounter={zIndexCounter} />
-        <Window titleName="Untitled 2" zIndexCounter={zIndexCounter} />
-    </div>, 
-    document.getElementById('world'));
+        <Window 
+            titleName="Untitled"
+            windowsManager={wm} />
+        <Window 
+            titleName="Untitled 2"
+            windowsManager={wm} />
+    </div>,
+        document.getElementById('world'));
 
 });
