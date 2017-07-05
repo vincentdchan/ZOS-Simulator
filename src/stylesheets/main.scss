@@ -1,0 +1,39 @@
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.window {
+    position: fixed;
+    background-color: white;
+    border-style: solid;
+    border-width: 2px;
+    border-color: white;
+
+    .titleBar {
+        width: 100%;
+        background-color: lightblue;
+        height: 16px;
+
+        .name {
+            font-size: 14px;
+            color: black;
+            margin: 0px;
+        }
+    }
+
+    .right {
+        position: absolute;
+        right: 0px;
+        font-size: 14px;
+    }
+
+    .right:hover {
+        background-color: white;
+        color: lightblue;
+    }
+}
