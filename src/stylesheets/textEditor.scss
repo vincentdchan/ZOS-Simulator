@@ -1,0 +1,22 @@
+
+.text-editor {
+
+    .toolbar {
+        height: 20px;
+
+        .btn {
+            margin: 2px;
+        }
+
+        .btn:hover {
+            background: lightblue;
+        }
+
+    }
+
+    .real-editor {
+        height: 260px;
+        width: 396px;
+    }
+
+}

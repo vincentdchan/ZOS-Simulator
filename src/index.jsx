@@ -1,6 +1,7 @@
 const {VirtualLine}  = require("./VirtualLine.js")
 import {WindowsManager} from "./Windows/WindowsManager.js"
 import {Window} from "./Windows/Window.jsx"
+import {TextEditor} from "./TextEditor/TextEditor.jsx"
 import {FileWindow} from "./Files/FileWindow.jsx"
 import React from "react"
 import ReactDOM from 'react-dom'
@@ -72,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     let wm = new WindowsManager();
 
     ReactDOM.render(<div>
-        <Window 
+        <TextEditor 
             titleName="Untitled 2"
             windowsManager={wm} />
         <FileWindow 

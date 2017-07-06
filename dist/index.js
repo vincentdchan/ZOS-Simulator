@@ -717,6 +717,8 @@ var _WindowsManager = __webpack_require__(10);
 
 var _Window = __webpack_require__(2);
 
+var _TextEditor = __webpack_require__(17);
+
 var _FileWindow = __webpack_require__(8);
 
 var _react = __webpack_require__(0);
@@ -801,7 +803,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     _reactDom2.default.render(_react2.default.createElement(
         "div",
         null,
-        _react2.default.createElement(_Window.Window, {
+        _react2.default.createElement(_TextEditor.TextEditor, {
             titleName: "Untitled 2",
             windowsManager: wm }),
         _react2.default.createElement(_FileWindow.FileWindow, {
@@ -1378,6 +1380,128 @@ module.exports = function (css) {
 
 module.exports = __webpack_require__(5);
 
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.TextEditor = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(1);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _Window = __webpack_require__(2);
+
+var _textEditor = __webpack_require__(19);
+
+var _textEditor2 = _interopRequireDefault(_textEditor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var TextEditor = exports.TextEditor = function (_React$Component) {
+    _inherits(TextEditor, _React$Component);
+
+    function TextEditor(props) {
+        _classCallCheck(this, TextEditor);
+
+        return _possibleConstructorReturn(this, (TextEditor.__proto__ || Object.getPrototypeOf(TextEditor)).call(this, props));
+    }
+
+    _createClass(TextEditor, [{
+        key: "render",
+        value: function render() {
+            return _react2.default.createElement(
+                _Window.Window,
+                { titleName: this.props.titleName, windowsManager: this.props.windowsManager },
+                _react2.default.createElement(
+                    "div",
+                    { className: "text-editor" },
+                    _react2.default.createElement(
+                        "div",
+                        { className: "toolbar" },
+                        _react2.default.createElement(
+                            "span",
+                            { className: "btn" },
+                            _react2.default.createElement("i", { className: "fa fa-file-text-o", "aria-hidden": "true" })
+                        ),
+                        _react2.default.createElement(
+                            "span",
+                            { className: "btn" },
+                            _react2.default.createElement("i", { className: "fa fa-floppy-o", "aria-hidden": "true" })
+                        )
+                    ),
+                    _react2.default.createElement("textarea", { className: "real-editor" })
+                )
+            );
+        }
+    }]);
+
+    return TextEditor;
+}(_react2.default.Component);
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".text-editor .toolbar {\n  height: 20px; }\n  .text-editor .toolbar .btn {\n    margin: 2px; }\n  .text-editor .toolbar .btn:hover {\n    background: lightblue; }\n\n.text-editor .real-editor {\n  height: 260px;\n  width: 396px; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(18);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(4)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./textEditor.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./textEditor.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);
