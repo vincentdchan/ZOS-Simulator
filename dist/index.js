@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -85,263 +85,6 @@ module.exports = ReactDOM;
 "use strict";
 
 
-var _WindowsManager = __webpack_require__(6);
-
-var _Window = __webpack_require__(5);
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(1);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var _require = __webpack_require__(4),
-    VirtualLine = _require.VirtualLine;
-
-var measure_font = "船";
-
-document.addEventListener("DOMContentLoaded", function (event) {
-    var canvas = document.getElementById("main-canvas");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    var ctx = canvas.getContext("2d");
-
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "green";
-    ctx.font = "12px Microsoft YaHei";
-
-    var text = ctx.measureText(measure_font);
-    var font_width = text.width;
-    var font_height = text.height;
-
-    var virtuallines = [];
-
-    function Initialize() {
-        virtuallines = [];
-
-        var virtuallines_length = Math.ceil(canvas.width / font_width);
-
-        for (var i = 0; i < virtuallines_length; i++) {
-            var vl = new VirtualLine(i * (font_width + 2), font_width, canvas.height, font_width, 20);
-            virtuallines.push(vl);
-        }
-    }
-
-    window.addEventListener("resize", function (e) {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        Initialize();
-    });
-
-    Initialize();
-
-    var lastTime = new Date();
-    var accuTime = 0;
-
-    function tick() {
-        var now = new Date();
-        var deltaTime = (now.getTime() - lastTime.getTime()) / 1000;
-
-        accuTime += deltaTime;
-
-        if (accuTime > 0.08) {
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            virtuallines.forEach(function (v) {
-                v.paint(ctx, deltaTime);
-            });
-            accuTime = 0;
-        }
-
-        lastTime = now;
-
-        requestAnimationFrame(tick);
-    };
-
-    tick();
-
-    var wm = new _WindowsManager.WindowsManager();
-
-    _reactDom2.default.render(_react2.default.createElement(
-        "div",
-        null,
-        _react2.default.createElement(_Window.Window, {
-            titleName: "Untitled",
-            windowsManager: wm }),
-        _react2.default.createElement(_Window.Window, {
-            titleName: "Untitled 2",
-            windowsManager: wm })
-    ), document.getElementById('world'));
-});
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Emitter = exports.Emitter = function () {
-    function Emitter() {
-        _classCallCheck(this, Emitter);
-
-        this._map = {};
-    }
-
-    _createClass(Emitter, [{
-        key: "addEventListener",
-        value: function addEventListener(name, callback) {
-            if (name in this._map) {
-                this._map[name].push(callback);
-            } else {
-                this._map[name] = [callback];
-            }
-        }
-    }, {
-        key: "emit",
-        value: function emit() {
-            var args = Array.prototype.slice.call(arguments);
-            var name = args[0];
-            args = args.slice(1);
-            if (name in this._map) {
-                this._map[name].forEach(function (v) {
-                    return v.apply(undefined, args);
-                });
-            }
-        }
-    }]);
-
-    return Emitter;
-}();
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var resources = "トーマス・アンダーソンは、大手ソフトウェア会社のメタ・コーテックス[3]に勤めるプログラマである。しかし、トーマスにはあらゆるコンピュータ犯罪を起こす天才ハッカー[4]ネオという、もう1つの顔があった。平凡な日々を送っていたトーマスは、ここ最近、起きているのに夢を見ているような感覚に悩まされ「今生きているこの世界は、もしかしたら夢なのではないか」という、漠然とした違和感を抱いていたが、それを裏付ける確証も得られず毎日を過ごしていた。" + "ある日、トーマスは「起きろ、ネオ」「マトリックスが見ている」「白ウサギについて行け」という謎のメールを受け取る。ほどなくしてトリニティと名乗る謎の女性と出会ったトーマスは、トリニティの仲間のモーフィアスを紹介され「貴方が生きているこの世界は、コンピュータによって作られた仮想現実だ」と告げられ、このまま仮想現実で生きるか、現実の世界で目覚めるかの選択を迫られる。日常の違和感に悩まされていたトーマスは現実の世界で目覚める事を選択する。次の瞬間、トーマスは自分が培養槽のようなカプセルの中に閉じ込められ、身動きもできない状態であることに気付く。トリニティ達の言ったことは真実で、現実の世界はコンピュータの反乱[5]によって人間社会が崩壊し、人間の大部分はコンピュータの動力源として培養されていた。覚醒してしまったトーマスは不良品として廃棄されるが、待ち構えていたトリニティとモーフィアスに救われた。" + "トーマスは、モーフィアスが船長を務める工作船「ネブカドネザル号」の仲間として迎えられ、ハッカーとして使っていた名前「ネオ」を名乗ることになった。モーフィアスはネオこそがコンピュータの支配を打ち破る救世主であると信じており、仮想空間での身体の使い方や、拳法などの戦闘技術を習得させた。人類の抵抗軍の一員となったネオは、仮想空間と現実を行き来しながら、人類をコンピュータの支配から解放する戦いに身を投じる事になった。" + "《黑客帝国》（英语：The Matrix）是一部1999年的好莱坞科幻电影，由沃卓斯基姐妹执导，基努·里维斯、劳伦斯·菲什伯恩、凯莉·安摩丝及雨果·威文等人主演，并由香港电影界的袁和平担任武术指导。此片以其独到的哲学和子弹时间的特殊慢镜头及各式电脑特效著名，在全球获取亮眼票房，并在2003年，推出续集《黑客帝国2：重装上阵》及第三集《黑客帝国3：矩阵革命》";
-
-function ShuffleString(str, len) {
-    var result = "";
-    var str_len = str.length;
-    for (var i = 0; i < len; i++) {
-        var rd = Math.round(Math.random(new Date()) * str_len);
-        result += str[rd];
-    }
-    return result;
-}
-
-var total_level = 128;
-var black_level = 72;
-
-var VirtualLine = exports.VirtualLine = function () {
-    function VirtualLine(x_offset, width, height, font_width, font_height) {
-        _classCallCheck(this, VirtualLine);
-
-        this._x_offset = x_offset;
-        this._width = width;
-        this._height = height;
-
-        this._font_width = font_width;
-        this._font_height = font_height;
-
-        this._content = ShuffleString(resources, total_level);
-
-        this._tick = total_level;
-        this._offset_step = Math.round(Math.random() * total_level);
-    }
-
-    _createClass(VirtualLine, [{
-        key: "paint",
-        value: function paint(ctx, deltaTime) {
-            var text_length = Math.ceil(this._height / this._font_height);
-            for (var i = 0; i < text_length; i++) {
-                var absolute_level = (i + this._offset_step - this._tick) % total_level + total_level;
-                if (absolute_level > black_level) {
-                    var color_level = absolute_level - black_level;
-                    var green_level = Math.round(color_level / (total_level - black_level) * 255);
-                    if (green_level === 255) {
-                        ctx.shadowColor = "white";
-                        ctx.shadowOffsetX = 0;
-                        ctx.shadowOffsetY = 0;
-                        ctx.shadowBlur = 10;
-                        ctx.fillStyle = "rgb(20," + green_level.toString() + ",20)";
-                    } else {
-                        ctx.shadowBlur = 0;
-                        ctx.fillStyle = "rgb(0," + green_level.toString() + ",0)";
-                    }
-                    ctx.fillText(this._content[i], this._x_offset, i * this._font_height);
-                }
-            }
-            this._tick++;
-
-            var test_level = (this._offset_step - this._tick) % total_level + total_level;
-            if (test_level === 1) {
-                this._content = ShuffleString(resources, total_level);
-            }
-            /*
-            if (this._tick % this._offset_step === 0) {
-                this._content = ShuffleString(resources);
-            }
-            */
-        }
-    }, {
-        key: "x_offset",
-        get: function get() {
-            return this._x_offset;
-        }
-    }, {
-        key: "width",
-        get: function get() {
-            return this._width;
-        },
-        set: function set(value) {
-            this._width = value;
-        }
-    }, {
-        key: "height",
-        get: function get() {
-            return this._height;
-        },
-        set: function set(value) {
-            this._height = value;
-        }
-    }]);
-
-    return VirtualLine;
-}();
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -357,7 +100,7 @@ var _reactDom = __webpack_require__(1);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _main = __webpack_require__(9);
+var _main = __webpack_require__(14);
 
 var _main2 = _interopRequireDefault(_main);
 
@@ -439,9 +182,12 @@ var Window = exports.Window = function (_React$Component2) {
     _createClass(Window, [{
         key: "focus",
         value: function focus() {
-            this.setState({
-                focused: true
-            });
+            if (!this.state.focused) {
+                this.setState({
+                    focused: true,
+                    zIndex: this.windowsManager.zIndexCounter()
+                });
+            }
         }
     }, {
         key: "unfocus",
@@ -520,87 +266,7 @@ var Window = exports.Window = function (_React$Component2) {
 }(_react2.default.Component);
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.WindowsManager = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _Emitter2 = __webpack_require__(3);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var WindowsManager = exports.WindowsManager = function (_Emitter) {
-    _inherits(WindowsManager, _Emitter);
-
-    function WindowsManager() {
-        _classCallCheck(this, WindowsManager);
-
-        var _this = _possibleConstructorReturn(this, (WindowsManager.__proto__ || Object.getPrototypeOf(WindowsManager)).call(this));
-
-        _this._id_counter = 0;
-        _this._focused_id = 0;
-
-        var zIndex = 0;
-        _this.zIndexCounter = function () {
-            return zIndex++;
-        };
-        return _this;
-    }
-
-    _createClass(WindowsManager, [{
-        key: "GetZIndexCounter",
-        value: function GetZIndexCounter() {
-            return this.zIndexCounter;
-        }
-    }, {
-        key: "FocusWindow",
-        value: function FocusWindow(id) {
-            this._focused_id = id;
-            this.emit("focusedWindowChanged", id);
-        }
-    }, {
-        key: "GetFocusedId",
-        value: function GetFocusedId() {
-            return this._focused_id;
-        }
-    }, {
-        key: "GetNewId",
-        value: function GetNewId() {
-            return this._id_counter++;
-        }
-    }]);
-
-    return WindowsManager;
-}(_Emitter2.Emitter);
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(8)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".unselectable {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none; }\n\n.glowing-border {\n  outline: none;\n  border-color: #9ecaed;\n  box-shadow: 0 0 20px #49afff; }\n\n.window {\n  position: fixed;\n  background-color: white;\n  border-style: solid;\n  border-width: 2px;\n  border-color: white; }\n  .window .titleBar {\n    width: 100%;\n    background-color: lightblue;\n    height: 16px; }\n    .window .titleBar .name {\n      font-size: 14px;\n      color: black;\n      margin: 0px;\n      cursor: default; }\n  .window .right {\n    position: absolute;\n    right: 0px;\n    font-size: 14px; }\n  .window .right:hover {\n    background-color: white;\n    color: lightblue; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 8 */
+/* 3 */
 /***/ (function(module, exports) {
 
 /*
@@ -682,38 +348,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(7);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 10 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -759,7 +394,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(11);
+var	fixUrls = __webpack_require__(15);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -1072,7 +707,578 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _WindowsManager = __webpack_require__(10);
+
+var _Window = __webpack_require__(2);
+
+var _FileWindow = __webpack_require__(8);
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(1);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _require = __webpack_require__(9),
+    VirtualLine = _require.VirtualLine;
+
+var measure_font = "船";
+
+document.addEventListener("DOMContentLoaded", function (event) {
+    var canvas = document.getElementById("main-canvas");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    var ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "green";
+    ctx.font = "12px Microsoft YaHei";
+
+    var text = ctx.measureText(measure_font);
+    var font_width = text.width;
+    var font_height = text.height;
+
+    var virtuallines = [];
+
+    function Initialize() {
+        virtuallines = [];
+
+        var virtuallines_length = Math.ceil(canvas.width / font_width);
+
+        for (var i = 0; i < virtuallines_length; i++) {
+            var vl = new VirtualLine(i * (font_width + 2), font_width, canvas.height, font_width, 20);
+            virtuallines.push(vl);
+        }
+    }
+
+    window.addEventListener("resize", function (e) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        Initialize();
+    });
+
+    Initialize();
+
+    var lastTime = new Date();
+    var accuTime = 0;
+
+    function tick() {
+        var now = new Date();
+        var deltaTime = (now.getTime() - lastTime.getTime()) / 1000;
+
+        accuTime += deltaTime;
+
+        if (accuTime > 0.08) {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            virtuallines.forEach(function (v) {
+                v.paint(ctx, deltaTime);
+            });
+            accuTime = 0;
+        }
+
+        lastTime = now;
+
+        requestAnimationFrame(tick);
+    };
+
+    tick();
+
+    var wm = new _WindowsManager.WindowsManager();
+
+    _reactDom2.default.render(_react2.default.createElement(
+        "div",
+        null,
+        _react2.default.createElement(_Window.Window, {
+            titleName: "Untitled 2",
+            windowsManager: wm }),
+        _react2.default.createElement(_FileWindow.FileWindow, {
+            titleName: "File Manager",
+            windowsManager: wm })
+    ), document.getElementById('world'));
+});
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Emitter = exports.Emitter = function () {
+    function Emitter() {
+        _classCallCheck(this, Emitter);
+
+        this._map = {};
+    }
+
+    _createClass(Emitter, [{
+        key: "addEventListener",
+        value: function addEventListener(name, callback) {
+            if (name in this._map) {
+                this._map[name].push(callback);
+            } else {
+                this._map[name] = [callback];
+            }
+        }
+    }, {
+        key: "emit",
+        value: function emit() {
+            var args = Array.prototype.slice.call(arguments);
+            var name = args[0];
+            args = args.slice(1);
+            if (name in this._map) {
+                this._map[name].forEach(function (v) {
+                    return v.apply(undefined, args);
+                });
+            }
+        }
+    }]);
+
+    return Emitter;
+}();
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.FileItem = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(1);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _file = __webpack_require__(13);
+
+var _file2 = _interopRequireDefault(_file);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FileItem = exports.FileItem = function (_React$Component) {
+    _inherits(FileItem, _React$Component);
+
+    function FileItem(props) {
+        _classCallCheck(this, FileItem);
+
+        return _possibleConstructorReturn(this, (FileItem.__proto__ || Object.getPrototypeOf(FileItem)).call(this, props));
+    }
+
+    _createClass(FileItem, [{
+        key: "GetIcon",
+        value: function GetIcon() {
+            if (this.props.fileType == "folder") {
+                return _react2.default.createElement("img", { className: "file-icon", src: "assets/images/Folder-icon.png" });
+            } else {
+                return _react2.default.createElement("img", { className: "file-icon", src: "assets/images/Text-Document-icon.png" });
+            }
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return _react2.default.createElement(
+                "div",
+                { className: "file-item" },
+                this.GetIcon(),
+                _react2.default.createElement(
+                    "p",
+                    { className: "filename" },
+                    this.props.filename
+                )
+            );
+        }
+    }]);
+
+    return FileItem;
+}(_react2.default.Component);
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.FileWindow = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(1);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _Window = __webpack_require__(2);
+
+var _FileItem = __webpack_require__(7);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FileWindow = exports.FileWindow = function (_React$Component) {
+    _inherits(FileWindow, _React$Component);
+
+    function FileWindow(props) {
+        _classCallCheck(this, FileWindow);
+
+        var _this = _possibleConstructorReturn(this, (FileWindow.__proto__ || Object.getPrototypeOf(FileWindow)).call(this, props));
+
+        _this.fileManager = props.fileManager;
+
+        _this.state = {
+            path: "C:/"
+        };
+        return _this;
+    }
+
+    _createClass(FileWindow, [{
+        key: "render",
+        value: function render() {
+            var style = {
+                height: 260 + "px"
+            };
+            return _react2.default.createElement(
+                _Window.Window,
+                { titleName: this.props.titleName, windowsManager: this.props.windowsManager },
+                _react2.default.createElement(
+                    "div",
+                    { className: "pathContainer" },
+                    _react2.default.createElement("input", { type: "text", value: this.state.path, onChange: this.inputPathChanged.bind(this) })
+                ),
+                _react2.default.createElement(
+                    "div",
+                    { style: style, className: "itemContainer unselectable" },
+                    _react2.default.createElement(_FileItem.FileItem, { fileType: "text", filename: "text1.txt", fileManager: this.fileManager }),
+                    _react2.default.createElement(_FileItem.FileItem, { fileType: "text", filename: "text2.txt", fileManager: this.fileManager }),
+                    _react2.default.createElement(_FileItem.FileItem, { fileType: "folder", filename: "abc", fileManager: this.fileManager })
+                )
+            );
+        }
+    }, {
+        key: "inputPathChanged",
+        value: function inputPathChanged(event) {
+            this.setState({
+                path: event.target.value
+            });
+        }
+    }]);
+
+    return FileWindow;
+}(_react2.default.Component);
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var resources = "トーマス・アンダーソンは、大手ソフトウェア会社のメタ・コーテックス[3]に勤めるプログラマである。しかし、トーマスにはあらゆるコンピュータ犯罪を起こす天才ハッカー[4]ネオという、もう1つの顔があった。平凡な日々を送っていたトーマスは、ここ最近、起きているのに夢を見ているような感覚に悩まされ「今生きているこの世界は、もしかしたら夢なのではないか」という、漠然とした違和感を抱いていたが、それを裏付ける確証も得られず毎日を過ごしていた。" + "ある日、トーマスは「起きろ、ネオ」「マトリックスが見ている」「白ウサギについて行け」という謎のメールを受け取る。ほどなくしてトリニティと名乗る謎の女性と出会ったトーマスは、トリニティの仲間のモーフィアスを紹介され「貴方が生きているこの世界は、コンピュータによって作られた仮想現実だ」と告げられ、このまま仮想現実で生きるか、現実の世界で目覚めるかの選択を迫られる。日常の違和感に悩まされていたトーマスは現実の世界で目覚める事を選択する。次の瞬間、トーマスは自分が培養槽のようなカプセルの中に閉じ込められ、身動きもできない状態であることに気付く。トリニティ達の言ったことは真実で、現実の世界はコンピュータの反乱[5]によって人間社会が崩壊し、人間の大部分はコンピュータの動力源として培養されていた。覚醒してしまったトーマスは不良品として廃棄されるが、待ち構えていたトリニティとモーフィアスに救われた。" + "トーマスは、モーフィアスが船長を務める工作船「ネブカドネザル号」の仲間として迎えられ、ハッカーとして使っていた名前「ネオ」を名乗ることになった。モーフィアスはネオこそがコンピュータの支配を打ち破る救世主であると信じており、仮想空間での身体の使い方や、拳法などの戦闘技術を習得させた。人類の抵抗軍の一員となったネオは、仮想空間と現実を行き来しながら、人類をコンピュータの支配から解放する戦いに身を投じる事になった。" + "《黑客帝国》（英语：The Matrix）是一部1999年的好莱坞科幻电影，由沃卓斯基姐妹执导，基努·里维斯、劳伦斯·菲什伯恩、凯莉·安摩丝及雨果·威文等人主演，并由香港电影界的袁和平担任武术指导。此片以其独到的哲学和子弹时间的特殊慢镜头及各式电脑特效著名，在全球获取亮眼票房，并在2003年，推出续集《黑客帝国2：重装上阵》及第三集《黑客帝国3：矩阵革命》";
+
+function ShuffleString(str, len) {
+    var result = "";
+    var str_len = str.length;
+    for (var i = 0; i < len; i++) {
+        var rd = Math.round(Math.random(new Date()) * str_len);
+        result += str[rd];
+    }
+    return result;
+}
+
+var total_level = 128;
+var black_level = 72;
+
+var VirtualLine = exports.VirtualLine = function () {
+    function VirtualLine(x_offset, width, height, font_width, font_height) {
+        _classCallCheck(this, VirtualLine);
+
+        this._x_offset = x_offset;
+        this._width = width;
+        this._height = height;
+
+        this._font_width = font_width;
+        this._font_height = font_height;
+
+        this._content = ShuffleString(resources, total_level);
+
+        this._tick = total_level;
+        this._offset_step = Math.round(Math.random() * total_level);
+    }
+
+    _createClass(VirtualLine, [{
+        key: "paint",
+        value: function paint(ctx, deltaTime) {
+            var text_length = Math.ceil(this._height / this._font_height);
+            for (var i = 0; i < text_length; i++) {
+                var absolute_level = (i + this._offset_step - this._tick) % total_level + total_level;
+                if (absolute_level > black_level) {
+                    var color_level = absolute_level - black_level;
+                    var green_level = Math.round(color_level / (total_level - black_level) * 255);
+                    if (green_level === 255) {
+                        ctx.shadowColor = "white";
+                        ctx.shadowOffsetX = 0;
+                        ctx.shadowOffsetY = 0;
+                        ctx.shadowBlur = 10;
+                        ctx.fillStyle = "rgb(20," + green_level.toString() + ",20)";
+                    } else {
+                        ctx.shadowBlur = 0;
+                        ctx.fillStyle = "rgb(0," + green_level.toString() + ",0)";
+                    }
+                    ctx.fillText(this._content[i], this._x_offset, i * this._font_height);
+                }
+            }
+            this._tick++;
+
+            var test_level = (this._offset_step - this._tick) % total_level + total_level;
+            if (test_level === 1) {
+                this._content = ShuffleString(resources, total_level);
+            }
+            /*
+            if (this._tick % this._offset_step === 0) {
+                this._content = ShuffleString(resources);
+            }
+            */
+        }
+    }, {
+        key: "x_offset",
+        get: function get() {
+            return this._x_offset;
+        }
+    }, {
+        key: "width",
+        get: function get() {
+            return this._width;
+        },
+        set: function set(value) {
+            this._width = value;
+        }
+    }, {
+        key: "height",
+        get: function get() {
+            return this._height;
+        },
+        set: function set(value) {
+            this._height = value;
+        }
+    }]);
+
+    return VirtualLine;
+}();
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.WindowsManager = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Emitter2 = __webpack_require__(6);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var WindowsManager = exports.WindowsManager = function (_Emitter) {
+    _inherits(WindowsManager, _Emitter);
+
+    function WindowsManager() {
+        _classCallCheck(this, WindowsManager);
+
+        var _this = _possibleConstructorReturn(this, (WindowsManager.__proto__ || Object.getPrototypeOf(WindowsManager)).call(this));
+
+        _this._id_counter = 0;
+        _this._focused_id = 0;
+
+        var zIndex = 0;
+        _this.zIndexCounter = function () {
+            return zIndex++;
+        };
+        return _this;
+    }
+
+    _createClass(WindowsManager, [{
+        key: "GetZIndexCounter",
+        value: function GetZIndexCounter() {
+            return this.zIndexCounter;
+        }
+    }, {
+        key: "FocusWindow",
+        value: function FocusWindow(id) {
+            this._focused_id = id;
+            this.emit("focusedWindowChanged", id);
+        }
+    }, {
+        key: "GetFocusedId",
+        value: function GetFocusedId() {
+            return this._focused_id;
+        }
+    }, {
+        key: "GetNewId",
+        value: function GetNewId() {
+            return this._id_counter++;
+        }
+    }]);
+
+    return WindowsManager;
+}(_Emitter2.Emitter);
+
+/***/ }),
 /* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".file-item {\n  display: inline-block;\n  width: 100px;\n  cursor: default; }\n  .file-item .file-icon {\n    width: 100px;\n    height: 100px; }\n  .file-item .filename {\n    color: grey;\n    margin: 0px;\n    text-align: center; }\n\n.file-item:hover {\n  background: lightblue; }\n\n.itemContainer {\n  overflow-y: scroll; }\n\n.pathContainer {\n  width: 100%; }\n  .pathContainer input {\n    width: 99%; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".unselectable {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none; }\n\n.glowing-border {\n  outline: none;\n  border-color: #9ecaed;\n  box-shadow: 0 0 20px #49afff; }\n\n.window {\n  position: fixed;\n  background-color: white;\n  border-style: solid;\n  border-width: 2px;\n  border-color: white; }\n  .window .titleBar {\n    width: 100%;\n    background-color: lightblue;\n    height: 16px; }\n    .window .titleBar .name {\n      font-size: 14px;\n      color: black;\n      margin: 0px;\n      cursor: default; }\n  .window .right {\n    position: absolute;\n    right: 0px;\n    font-size: 14px; }\n  .window .right:hover {\n    background-color: white;\n    color: lightblue; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(11);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(4)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./file.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./file.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(12);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(4)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 15 */
 /***/ (function(module, exports) {
 
 
@@ -1167,10 +1373,10 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 12 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(2);
+module.exports = __webpack_require__(5);
 
 
 /***/ })

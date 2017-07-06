@@ -1,0 +1,34 @@
+
+.file-item {
+    display: inline-block;
+    width: 100px;
+    cursor: default;
+
+    .file-icon {
+        width: 100px;
+        height: 100px;
+    }
+
+    .filename {
+        color: grey;
+        margin: 0px;
+        text-align: center;
+    }
+
+}
+
+.file-item:hover {
+    background: lightblue;
+}
+
+.itemContainer {
+    overflow-y: scroll;
+}
+
+.pathContainer {
+    width: 100%;
+
+    input {
+        width: 99%;
+    }
+}

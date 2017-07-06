@@ -45,9 +45,12 @@ export class Window extends React.Component {
     }
 
     focus() {
-        this.setState({
-            focused: true
-        });
+        if (!this.state.focused) {
+            this.setState({
+                focused: true,
+                zIndex: this.windowsManager.zIndexCounter(),
+            });
+        }
     }
 
     unfocus() {
