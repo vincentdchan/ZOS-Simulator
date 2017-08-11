@@ -1,0 +1,21 @@
+
+.program-executor {
+
+    .toolbar {
+        height: 48px;
+
+        .item {
+            display: inline-block;
+            img {
+                width: 48px;
+                height: 48px;
+            }
+        }
+
+        .item:hover {
+            background: lightblue;
+        }
+
+    }
+
+}

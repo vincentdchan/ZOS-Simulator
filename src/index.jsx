@@ -3,6 +3,7 @@ import {WindowsManager} from "./Windows/WindowsManager.js"
 import {Window} from "./Windows/Window.jsx"
 import {TextEditor} from "./TextEditor/TextEditor.jsx"
 import {FileWindow} from "./Files/FileWindow.jsx"
+import {ProgramExecutor} from "./ProgramExecutor/ProgramExecutor.jsx"
 import React from "react"
 import ReactDOM from 'react-dom'
 
@@ -78,6 +79,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
             windowsManager={wm} />
         <FileWindow 
             titleName="File Manager"
+            windowsManager={wm} />
+        <ProgramExecutor 
+            titleName="ProgramExecutor"
             windowsManager={wm} />
     </div>,
         document.getElementById('world'));
