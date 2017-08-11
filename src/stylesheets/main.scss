@@ -31,12 +31,17 @@
             margin: 0px;
             cursor: default;
         }
+
+        p {
+            line-height: 16px;
+        }
     }
 
     .right {
         position: absolute;
         right: 0px;
         font-size: 14px;
+        line-height: 16px;
     }
 
     .right:hover {
