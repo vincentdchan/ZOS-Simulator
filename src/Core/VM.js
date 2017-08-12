@@ -43,6 +43,30 @@ function newInst(op_code, a1, a2, a3) {
     return [op_code, a1, a2, a3];
 }
 
+export class Context {
+
+    constructor() {
+        this._registers = [];
+        this._registers.length = 256;
+        this._flags = {
+            gt: false,
+            lt: false,
+            zero: false,
+            sign: false,
+            type: "undefined"
+        }
+    }
+
+    RunProgram(program) {
+
+    }
+
+    Eval(source_code) {
+
+    }
+
+}
+
 export class Program {
 
     constructor() {
