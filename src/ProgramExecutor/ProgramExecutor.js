@@ -24,15 +24,15 @@ const template = `<div ref="frame" class="program-executor">
     <div class="main-table row" ref="programFrame">
         <div class="col-8 code-area">
             <div class="line">
-                <div class="gutter">1</div>
+                <div class="gutter unselectable">1</div>
                 <div class="content">ADD R1, 3, 2</div>
             </div>
             <div class="line">
-                <div class="gutter">2</div>
+                <div class="gutter unselectable">2</div>
                 <div class="content">ADD 3</div>
             </div>
             <div class="line">
-                <div class="gutter">3</div>
+                <div class="gutter unselectable">3</div>
                 <div class="content"></div>
             </div>
         </div>
