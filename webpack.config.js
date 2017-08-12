@@ -30,9 +30,5 @@ module.exports = {
     //     })
     // ],
     externals: {
-        'react': 'React', // Case matters here 
-        'react-dom': 'ReactDOM', // Case matters here
-        'winjs': 'WinJS',
-        // 'react-winjs': 'ReactWinJS',
     }
 };

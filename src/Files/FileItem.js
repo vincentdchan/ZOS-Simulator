@@ -1,5 +1,3 @@
-import React from "react"
-import ReactDOM from 'react-dom'
 import style from "../stylesheets/file.scss"
 
 const template = `
@@ -9,10 +7,9 @@ const template = `
 </div>
 `;
 
-export class FileItem extends React.Component {
+export class FileItem {
 
     constructor(props) {
-        super(props);
     }
 
     GetIcon() {

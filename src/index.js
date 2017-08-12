@@ -1,6 +1,6 @@
 const {VirtualLine}  = require("./VirtualLine.js")
 import {WindowsManager} from "./Windows/WindowsManager.js"
-import {Window} from "./Windows/Window"
+import {Window, Component} from "./Windows/Window"
 import {TextEditor} from "./TextEditor/TextEditor"
 import {FileWindow} from "./Files/FileWindow"
 import {ProgramExecutor} from "./ProgramExecutor/ProgramExecutor"
@@ -83,5 +83,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     //         windowsManager={wm} />
     // </div>,
     //     document.getElementById('world'));
+    let my_window = new Window();
 
+    let world = document.getElementById('world');
+    world.appendChild(my_window.dom);
 });
