@@ -1159,22 +1159,7 @@ var FileWindow = exports.FileWindow = function () {
             var style = {
                 height: 260 + "px"
             };
-            return React.createElement(
-                _Window.Window,
-                { titleName: this.props.titleName, windowsManager: this.props.windowsManager },
-                React.createElement(
-                    "div",
-                    { className: "pathContainer" },
-                    React.createElement("input", { type: "text", value: this.state.path, onChange: this.inputPathChanged.bind(this) })
-                ),
-                React.createElement(
-                    "div",
-                    { style: style, className: "itemContainer unselectable" },
-                    React.createElement(_FileItem.FileItem, { fileType: "text", filename: "text1.txt", fileManager: this.fileManager }),
-                    React.createElement(_FileItem.FileItem, { fileType: "text", filename: "text2.txt", fileManager: this.fileManager }),
-                    React.createElement(_FileItem.FileItem, { fileType: "folder", filename: "abc", fileManager: this.fileManager })
-                )
-            );
+            return null;
         }
     }, {
         key: "inputPathChanged",
