@@ -47,10 +47,16 @@ export class Program {
 
     constructor() {
         this._program = [];
+        this._contants = [];
     }
 
     AddInstruction(op_code, a1, a2, a3) {
         this._program.push(newInst(op_code, a1, a2, a3));
+    }
+
+    AddConstant(constant) {
+        this._contants.push(constant);
+        return this._contants.length;
     }
 
 }
