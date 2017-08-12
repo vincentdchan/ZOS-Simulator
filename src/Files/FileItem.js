@@ -1,27 +1,40 @@
 import style from "../stylesheets/file.scss"
+import {Component} from "../Windows/Window"
 
-const template = `
-<div className="file-item">
-    {this.GetIcon()}
-    <p className="filename">{this.props.filename}</p>
-</div>
-`;
+const template = `<div class="file-item">
+    <img ref="iconimg" class="file-icon" src="assets/images/Folder-icon.png" />
+    <p class="filename" ref="filename"></p>
+</div>`
 
-export class FileItem {
+export class FileItem extends Component {
 
-    constructor(props) {
+    constructor() {
+        super();
+        this._dom = this.RenderTemplate(template);
+        this.fileType = "folder";
     }
 
-    GetIcon() {
-        if (this.props.fileType == "folder") {
-            return <img className="file-icon" src="assets/images/Folder-icon.png" />
+    get fileType() {
+        return this._fileType;
+    }
+
+    set fileType(value) {
+        this._fileType = value;
+
+        if (this._fileType == "folder") {
+            this.$refs.iconimg.setAttribute("file-icon", "assets/images/Folder-icon.png");
         } else {
-            return <img className="file-icon" src="assets/images/Text-Document-icon.png" />
+            this.$refs.iconimg.setAttribute("file-icon", "assets/images/Text-Document-icon.png");
         }
     }
 
-    render() {
-        return null;
+    get filename() {
+        return this._filename;
+    }
+
+    set filename(value) {
+        this._filename = value;
+        this.$refs.filename.innerText = value;
     }
 
 }

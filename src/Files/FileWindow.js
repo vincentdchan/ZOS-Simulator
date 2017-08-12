@@ -1,29 +1,27 @@
 import {Window} from "../Windows/Window.js"
 import {FileItem} from "./FileItem.js"
 
-const template = `
-<Window titleName={this.props.titleName} windowsManager={this.props.windowsManager}>
-    <div className="pathContainer">
-        <input type="text" value={this.state.path} onChange={this.inputPathChanged.bind(this)} />
+const template = `<div class="pathContainer">
+    <input type="text" />
+    <div class="itemContainer unselectable" ref="fileContainer">
     </div>
-    <div style={style} className="itemContainer unselectable">
-        <FileItem fileType="text" filename="text1.txt" fileManager={this.fileManager} />
-        <FileItem fileType="text" filename="text2.txt" fileManager={this.fileManager} />
-        <FileItem fileType="folder" filename="abc" fileManager={this.fileManager} />
-    </div>
-</Window>
-`
+</div>`
 
-export class FileWindow {
+export class FileWindow extends Window {
 
-    constructor(props) {
-        // super(props);
+    constructor(wm) {
+        super(wm);
+        this.Slot('default', this.RenderTemplate(template))
 
-        this.fileManager = props.fileManager;
+        let fi1 = new FileItem();
+        fi1.fileType = "text";
+        fi1.filename = "text1.txt";
+        let fi2 = new FileItem();
+        fi2.fileType = "bolder";
+        fi2.filename = "abc";
 
-        this.state = {
-            path: "C:/",
-        };
+        this.$refs.fileContainer.appendChild(fi1.dom);
+        this.$refs.fileContainer.appendChild(fi2.dom);
     }
 
     render() {

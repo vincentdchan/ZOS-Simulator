@@ -914,10 +914,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
     //     document.getElementById('world'));
     var my_window = new _TextEditor.TextEditor(wm);
     var pe = new _ProgramExecutor.ProgramExecutor(wm);
+    var fw = new _FileWindow.FileWindow(wm);
 
     var world = document.getElementById('world');
     world.appendChild(my_window.dom);
     world.appendChild(pe.dom);
+    world.appendChild(fw.dom);
 });
 
 /***/ }),
@@ -2106,25 +2108,38 @@ exports.FileWindow = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Window = __webpack_require__(0);
+var _Window2 = __webpack_require__(0);
 
 var _FileItem = __webpack_require__(15);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var template = "\n<Window titleName={this.props.titleName} windowsManager={this.props.windowsManager}>\n    <div className=\"pathContainer\">\n        <input type=\"text\" value={this.state.path} onChange={this.inputPathChanged.bind(this)} />\n    </div>\n    <div style={style} className=\"itemContainer unselectable\">\n        <FileItem fileType=\"text\" filename=\"text1.txt\" fileManager={this.fileManager} />\n        <FileItem fileType=\"text\" filename=\"text2.txt\" fileManager={this.fileManager} />\n        <FileItem fileType=\"folder\" filename=\"abc\" fileManager={this.fileManager} />\n    </div>\n</Window>\n";
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-var FileWindow = exports.FileWindow = function () {
-    function FileWindow(props) {
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var template = "<div class=\"pathContainer\">\n    <input type=\"text\" />\n    <div class=\"itemContainer unselectable\" ref=\"fileContainer\">\n    </div>\n</div>";
+
+var FileWindow = exports.FileWindow = function (_Window) {
+    _inherits(FileWindow, _Window);
+
+    function FileWindow(wm) {
         _classCallCheck(this, FileWindow);
 
-        // super(props);
+        var _this = _possibleConstructorReturn(this, (FileWindow.__proto__ || Object.getPrototypeOf(FileWindow)).call(this, wm));
 
-        this.fileManager = props.fileManager;
+        _this.Slot('default', _this.RenderTemplate(template));
 
-        this.state = {
-            path: "C:/"
-        };
+        var fi1 = new _FileItem.FileItem();
+        fi1.fileType = "text";
+        fi1.filename = "text1.txt";
+        var fi2 = new _FileItem.FileItem();
+        fi2.fileType = "bolder";
+        fi2.filename = "abc";
+
+        _this.$refs.fileContainer.appendChild(fi1.dom);
+        _this.$refs.fileContainer.appendChild(fi2.dom);
+        return _this;
     }
 
     _createClass(FileWindow, [{
@@ -2145,7 +2160,7 @@ var FileWindow = exports.FileWindow = function () {
     }]);
 
     return FileWindow;
-}();
+}(_Window2.Window);
 
 /***/ }),
 /* 15 */
@@ -2165,35 +2180,58 @@ var _file = __webpack_require__(16);
 
 var _file2 = _interopRequireDefault(_file);
 
+var _Window = __webpack_require__(0);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var template = "\n<div className=\"file-item\">\n    {this.GetIcon()}\n    <p className=\"filename\">{this.props.filename}</p>\n</div>\n";
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-var FileItem = exports.FileItem = function () {
-    function FileItem(props) {
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var template = "<div class=\"file-item\">\n    <img ref=\"iconimg\" class=\"file-icon\" src=\"assets/images/Folder-icon.png\" />\n    <p class=\"filename\" ref=\"filename\"></p>\n</div>";
+
+var FileItem = exports.FileItem = function (_Component) {
+    _inherits(FileItem, _Component);
+
+    function FileItem() {
         _classCallCheck(this, FileItem);
+
+        var _this = _possibleConstructorReturn(this, (FileItem.__proto__ || Object.getPrototypeOf(FileItem)).call(this));
+
+        _this._dom = _this.RenderTemplate(template);
+        _this.fileType = "folder";
+        return _this;
     }
 
     _createClass(FileItem, [{
-        key: "GetIcon",
-        value: function GetIcon() {
-            if (this.props.fileType == "folder") {
-                return React.createElement("img", { className: "file-icon", src: "assets/images/Folder-icon.png" });
+        key: "fileType",
+        get: function get() {
+            return this._fileType;
+        },
+        set: function set(value) {
+            this._fileType = value;
+
+            if (this._fileType == "folder") {
+                this.$refs.iconimg.setAttribute("file-icon", "assets/images/Folder-icon.png");
             } else {
-                return React.createElement("img", { className: "file-icon", src: "assets/images/Text-Document-icon.png" });
+                this.$refs.iconimg.setAttribute("file-icon", "assets/images/Text-Document-icon.png");
             }
         }
     }, {
-        key: "render",
-        value: function render() {
-            return null;
+        key: "filename",
+        get: function get() {
+            return this._filename;
+        },
+        set: function set(value) {
+            this._filename = value;
+            this.$refs.filename.innerText = value;
         }
     }]);
 
     return FileItem;
-}();
+}(_Window.Component);
 
 /***/ }),
 /* 16 */

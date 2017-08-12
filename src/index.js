@@ -85,8 +85,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     //     document.getElementById('world'));
     let my_window = new TextEditor(wm);
     let pe = new ProgramExecutor(wm);
+    let fw = new FileWindow(wm);
 
     let world = document.getElementById('world');
     world.appendChild(my_window.dom);
     world.appendChild(pe.dom);
+    world.appendChild(fw.dom);
 });
