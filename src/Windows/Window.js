@@ -3,18 +3,6 @@ import * as htmlparser from "htmlparser"
 
 export class Component {
 
-    static Compile() {
-        for (let key in template_map) {
-            let value = template_map[key];
-            let domlist = renderTemplate(value.text);
-            let dom_map = vListToDomList(domlist);
-        }
-    }
-
-    static travaseNode(node) {
-
-    }
-
     set dom(value) {
         this._dom = value;
     }
@@ -24,7 +12,8 @@ export class Component {
     }
 
     constructor() {
-        this._slot = {}
+        this._slot = {};
+        this.$refs = {};
     }
 
     RenderTemplate(template) {
@@ -59,8 +48,13 @@ export class Component {
                     } else {
                         dom = document.createElement(dom_node.name);
                         for (let attr_key in dom_node.attribs) {
-                            let attr_value = dom_node.attribs[attr_key];
-                            dom.setAttribute(attr_key, attr_value);
+                            if (attr_key == 'ref') {
+                                let attr_value = dom_node.attribs[attr_key];
+                                this.$refs[attr_value] = dom;
+                            } else {
+                                let attr_value = dom_node.attribs[attr_key];
+                                dom.setAttribute(attr_key, attr_value);
+                            }
                         }
                         if ('children' in dom_node) {
                             this.vListToDomList(dom_node['children']).forEach((value) => {
@@ -92,12 +86,12 @@ class TitleBar extends Component {
 
 }
 
-const window_template = `<div class="window">
+const window_template = `<div class="window" ref="frame">
     <div class="titleBar unselectable" >
         <div class="right">
             <i class="fa fa-window-close" aria-hidden="true"></i>
         </div>
-        <p class="name">Title</p>
+        <p class="name" ref="title_content"></p>
     </div>
     <div>
         <slot name="default" />
@@ -110,10 +104,11 @@ export class Window extends Component {
         super();
         this.RenderTemplate(window_template);
 
-        this.x = '16px';
-        this.y = '16px';
-        this.width = '400px';
-        this.height = '300px';
+        this.x = 16;
+        this.y = 16;
+        this.width = 400;
+        this.height = 300;
+        this.title = "Window";
         // super(props);
 
         // this.titleBarPressed = false;
@@ -207,14 +202,25 @@ export class Window extends Component {
         this.titleBarPressed = false;
     }
 
+    get title() {
+        return this._title;
+    }
+
+    set title(value) {
+        if (this._title != value) {
+            this.$refs['title_content'].innerText = value;
+            this._title = value;
+        }
+    }
+
     get x() {
         return this._x;
     }
 
     set x(value) {
-        if (this._x != value) {
+        if (this._x !== value) {
             this._x = value;
-            this._dom.style.left = value;
+            this._dom.style.left = value + 'px';
         }
     }
 
@@ -223,9 +229,9 @@ export class Window extends Component {
     }
 
     set y(value) {
-        if (this._y != value) {
+        if (this._y !== value) {
             this._y = value;
-            this._dom.style.top = value;
+            this._dom.style.top = value + 'px';
         }
     }
 
@@ -234,9 +240,9 @@ export class Window extends Component {
     }
 
     set width(value) {
-        if (this._width != value) {
+        if (this._width !== value) {
             this._width = value;
-            this._dom.style.width = value;
+            this._dom.style.width = value + 'px' ;
         }
     }
 
@@ -245,9 +251,9 @@ export class Window extends Component {
     }
 
     set height(value) {
-        if (this._height != value) {
+        if (this._height !== value) {
             this._height = value;
-            this._dom.style.height = value;
+            this._dom.style.height = value + 'px';
         }
     }
 

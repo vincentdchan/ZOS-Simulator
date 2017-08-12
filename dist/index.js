@@ -104,24 +104,13 @@ var Component = exports.Component = function () {
         get: function get() {
             return this._dom;
         }
-    }], [{
-        key: "Compile",
-        value: function Compile() {
-            for (var key in template_map) {
-                var value = template_map[key];
-                var domlist = renderTemplate(value.text);
-                var dom_map = vListToDomList(domlist);
-            }
-        }
-    }, {
-        key: "travaseNode",
-        value: function travaseNode(node) {}
     }]);
 
     function Component() {
         _classCallCheck(this, Component);
 
         this._slot = {};
+        this.$refs = {};
     }
 
     _createClass(Component, [{
@@ -161,8 +150,13 @@ var Component = exports.Component = function () {
                         } else {
                             dom = document.createElement(dom_node.name);
                             for (var attr_key in dom_node.attribs) {
-                                var attr_value = dom_node.attribs[attr_key];
-                                dom.setAttribute(attr_key, attr_value);
+                                if (attr_key == 'ref') {
+                                    var attr_value = dom_node.attribs[attr_key];
+                                    _this.$refs[attr_value] = dom;
+                                } else {
+                                    var _attr_value = dom_node.attribs[attr_key];
+                                    dom.setAttribute(attr_key, _attr_value);
+                                }
                             }
                             if ('children' in dom_node) {
                                 _this.vListToDomList(dom_node['children']).forEach(function (value) {
@@ -207,7 +201,7 @@ var TitleBar = function (_Component) {
     return TitleBar;
 }(Component);
 
-var window_template = "<div class=\"window\">\n    <div class=\"titleBar unselectable\" >\n        <div class=\"right\">\n            <i class=\"fa fa-window-close\" aria-hidden=\"true\"></i>\n        </div>\n        <p class=\"name\">Title</p>\n    </div>\n    <div>\n        <slot name=\"default\" />\n    </div>\n</div>";
+var window_template = "<div class=\"window\" ref=\"frame\">\n    <div class=\"titleBar unselectable\" >\n        <div class=\"right\">\n            <i class=\"fa fa-window-close\" aria-hidden=\"true\"></i>\n        </div>\n        <p class=\"name\" ref=\"title_content\"></p>\n    </div>\n    <div>\n        <slot name=\"default\" />\n    </div>\n</div>";
 
 var Window = exports.Window = function (_Component2) {
     _inherits(Window, _Component2);
@@ -219,10 +213,11 @@ var Window = exports.Window = function (_Component2) {
 
         _this3.RenderTemplate(window_template);
 
-        _this3.x = '16px';
-        _this3.y = '16px';
-        _this3.width = '400px';
-        _this3.height = '300px';
+        _this3.x = 16;
+        _this3.y = 16;
+        _this3.width = 400;
+        _this3.height = 300;
+        _this3.title = "Window";
         // super(props);
 
         // this.titleBarPressed = false;
@@ -325,14 +320,25 @@ var Window = exports.Window = function (_Component2) {
             this.titleBarPressed = false;
         }
     }, {
+        key: "title",
+        get: function get() {
+            return this._title;
+        },
+        set: function set(value) {
+            if (this._title != value) {
+                this.$refs['title_content'].innerText = value;
+                this._title = value;
+            }
+        }
+    }, {
         key: "x",
         get: function get() {
             return this._x;
         },
         set: function set(value) {
-            if (this._x != value) {
+            if (this._x !== value) {
                 this._x = value;
-                this._dom.style.left = value;
+                this._dom.style.left = value + 'px';
             }
         }
     }, {
@@ -341,9 +347,9 @@ var Window = exports.Window = function (_Component2) {
             return this._y;
         },
         set: function set(value) {
-            if (this._y != value) {
+            if (this._y !== value) {
                 this._y = value;
-                this._dom.style.top = value;
+                this._dom.style.top = value + 'px';
             }
         }
     }, {
@@ -352,9 +358,9 @@ var Window = exports.Window = function (_Component2) {
             return this._width;
         },
         set: function set(value) {
-            if (this._width != value) {
+            if (this._width !== value) {
                 this._width = value;
-                this._dom.style.width = value;
+                this._dom.style.width = value + 'px';
             }
         }
     }, {
@@ -363,9 +369,9 @@ var Window = exports.Window = function (_Component2) {
             return this._height;
         },
         set: function set(value) {
-            if (this._height != value) {
+            if (this._height !== value) {
                 this._height = value;
-                this._dom.style.height = value;
+                this._dom.style.height = value + 'px';
             }
         }
     }]);
