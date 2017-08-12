@@ -21,7 +21,7 @@ export class VM {
     }
 
     // Run the program and listen to the
-    // every stop of the program
+    // every step of the program
     RunDebug(program, callback) {
 
     }
