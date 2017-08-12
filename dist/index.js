@@ -203,7 +203,7 @@ var TitleBar = function (_Component) {
     return TitleBar;
 }(Component);
 
-var window_template = "<div class=\"window\" ref=\"frame\">\n    <div class=\"titleBar unselectable\" >\n        <div class=\"right\">\n            <i class=\"fa fa-window-close\" aria-hidden=\"true\"></i>\n        </div>\n        <p class=\"name\" ref=\"title_content\"></p>\n    </div>\n    <div>\n        <slot name=\"default\" />\n    </div>\n</div>";
+var window_template = "<div class=\"window\" ref=\"frame\">\n    <div class=\"titleBar unselectable\" ref=\"titlebar\">\n        <div class=\"right\">\n            <i class=\"fa fa-window-close\" aria-hidden=\"true\"></i>\n        </div>\n        <p class=\"name\" ref=\"title_content\"></p>\n    </div>\n    <div>\n        <slot name=\"default\" />\n    </div>\n</div>";
 
 var Window = exports.Window = function (_Component2) {
     _inherits(Window, _Component2);
@@ -233,7 +233,9 @@ var Window = exports.Window = function (_Component2) {
         //         this.unfocus();
         //     }
         // });
-        // window.addEventListener("mousemove", (event) => this.onMouseMove(event));
+        window.addEventListener("mousemove", function (event) {
+            return _this3.onMouseMove(event);
+        });
 
         // this.state = {
         //     x: 16,
@@ -243,6 +245,12 @@ var Window = exports.Window = function (_Component2) {
         //     zIndex: this.windowsManager.zIndexCounter(),
         //     focused: false,
         // };
+        _this3.$refs.titlebar.addEventListener('mouseup', function (e) {
+            return _this3.onTitleBarMouseUp(e);
+        });
+        _this3.$refs.titlebar.addEventListener('mousedown', function (e) {
+            return _this3.onTitleBarMouseDown(e);
+        });
         return _this3;
     }
 
@@ -293,13 +301,9 @@ var Window = exports.Window = function (_Component2) {
         key: "onMouseMove",
         value: function onMouseMove(event) {
             if (this.titleBarPressed) {
-                this.setState({
-                    x: event.clientX - this.lastOffset.x,
-                    y: event.clientY - this.lastOffset.y
-                });
-                this.lastOffset = {
-                    x: event.clientX - this.state.x,
-                    y: event.clientY - this.state.y
+                this.x = event.clientX - this.lastOffset.x, this.y = event.clientY - this.lastOffset.y, this.lastOffset = {
+                    x: event.clientX - this.x,
+                    y: event.clientY - this.y
                 };
             }
         }
@@ -308,13 +312,13 @@ var Window = exports.Window = function (_Component2) {
         value: function onTitleBarMouseDown(event) {
             this.titleBarPressed = true;
             this.lastOffset = {
-                x: event.clientX - this.state.x,
-                y: event.clientY - this.state.y
+                x: event.clientX - this.x,
+                y: event.clientY - this.y
             };
 
-            this.setState({
-                zIndex: this.windowsManager.zIndexCounter()
-            });
+            // this.setState({
+            //     zIndex: this.windowsManager.zIndexCounter(),
+            // });
         }
     }, {
         key: "onTitleBarMouseUp",

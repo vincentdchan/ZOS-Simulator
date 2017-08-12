@@ -89,7 +89,7 @@ class TitleBar extends Component {
 }
 
 const window_template = `<div class="window" ref="frame">
-    <div class="titleBar unselectable" >
+    <div class="titleBar unselectable" ref="titlebar">
         <div class="right">
             <i class="fa fa-window-close" aria-hidden="true"></i>
         </div>
@@ -124,7 +124,7 @@ export class Window extends Component {
         //         this.unfocus();
         //     }
         // });
-        // window.addEventListener("mousemove", (event) => this.onMouseMove(event));
+        window.addEventListener("mousemove", (event) => this.onMouseMove(event));
 
         // this.state = {
         //     x: 16,
@@ -134,6 +134,8 @@ export class Window extends Component {
         //     zIndex: this.windowsManager.zIndexCounter(),
         //     focused: false,
         // };
+        this.$refs.titlebar.addEventListener('mouseup', (e) => this.onTitleBarMouseUp(e));
+        this.$refs.titlebar.addEventListener('mousedown', (e) => this.onTitleBarMouseDown(e));
     }
 
     focus() {
@@ -177,13 +179,11 @@ export class Window extends Component {
 
     onMouseMove(event) {
         if (this.titleBarPressed) {
-            this.setState({
-                x: event.clientX - this.lastOffset.x,
-                y: event.clientY - this.lastOffset.y,
-            });
+            this.x = event.clientX - this.lastOffset.x,
+            this.y = event.clientY - this.lastOffset.y,
             this.lastOffset = {
-                x: event.clientX - this.state.x,
-                y: event.clientY - this.state.y,
+                x: event.clientX - this.x,
+                y: event.clientY - this.y,
             };
         }
     }
@@ -191,13 +191,13 @@ export class Window extends Component {
     onTitleBarMouseDown(event) {
         this.titleBarPressed = true;
         this.lastOffset = {
-            x: event.clientX - this.state.x,
-            y: event.clientY - this.state.y,
+            x: event.clientX - this.x,
+            y: event.clientY - this.y,
         };
 
-        this.setState({
-            zIndex: this.windowsManager.zIndexCounter(),
-        });
+        // this.setState({
+        //     zIndex: this.windowsManager.zIndexCounter(),
+        // });
     }
 
     onTitleBarMouseUp(event) {
