@@ -126,7 +126,7 @@ var Component = exports.Component = function () {
             parser.parseComplete(template);
             // console.log(JSON.stringify(handle.dom, null, 2));
             var doms = this.vListToDomList(handle.dom);
-            this._dom = doms[0];
+            return doms[0];
         }
     }, {
         key: "vListToDomList",
@@ -144,8 +144,10 @@ var Component = exports.Component = function () {
                             if ("attribs" in dom_node && "name" in dom_node.attribs) {
                                 var slot_name = dom_node.attribs.name;
                                 _this._slot[slot_name] = dom;
+                                dom.setAttribute('data-slot-name', slot_name);
                             } else {
                                 _this._slot['default'] = dom;
+                                dom.setAttribute('data-slot-name', 'default');
                             }
                         } else {
                             dom = document.createElement(dom_node.name);
@@ -176,8 +178,8 @@ var Component = exports.Component = function () {
         }
     }, {
         key: "Slot",
-        value: function Slot(value) {
-            this._dom.appendChild(value);
+        value: function Slot(name, value) {
+            this._slot[name].appendChild(value);
         }
     }]);
 
@@ -211,7 +213,7 @@ var Window = exports.Window = function (_Component2) {
 
         var _this3 = _possibleConstructorReturn(this, (Window.__proto__ || Object.getPrototypeOf(Window)).call(this));
 
-        _this3.RenderTemplate(window_template);
+        _this3._dom = _this3.RenderTemplate(window_template);
 
         _this3.x = 16;
         _this3.y = 16;
@@ -936,7 +938,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     //         windowsManager={wm} />
     // </div>,
     //     document.getElementById('world'));
-    var my_window = new _Window.Window();
+    var my_window = new _TextEditor.TextEditor();
 
     var world = document.getElementById('world');
     world.appendChild(my_window.dom);
@@ -2038,8 +2040,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.TextEditor = undefined;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _Window2 = __webpack_require__(0);
 
 var _textEditor = __webpack_require__(12);
@@ -2054,21 +2054,19 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var template = "\n<Window titleName={this.props.titleName} windowsManager={this.props.windowsManager}>\n    <div className=\"text-editor\">\n        <div className=\"toolbar\">\n            <span className=\"btn\"><i className=\"fa fa-file-text-o\" aria-hidden=\"true\"></i></span>\n            <span className=\"btn\"><i className=\"fa fa-floppy-o\" aria-hidden=\"true\"></i></span>\n        </div>\n        <textarea className=\"real-editor\"></textarea>\n    </div>\n</Window>\n";
+var template = "<div class=\"text-editor\">\n    <div class=\"toolbar\">\n        <span class=\"btn\"><i class=\"fa fa-file-text-o\" aria-hidden=\"true\"></i></span>\n        <span class=\"btn\"><i class=\"fa fa-floppy-o\" aria-hidden=\"true\"></i></span>\n    </div>\n    <textarea class=\"real-editor\"></textarea>\n</div>";
 
 var TextEditor = exports.TextEditor = function (_Window) {
     _inherits(TextEditor, _Window);
 
-    function TextEditor(props) {
+    function TextEditor() {
         _classCallCheck(this, TextEditor);
 
-        return _possibleConstructorReturn(this, (TextEditor.__proto__ || Object.getPrototypeOf(TextEditor)).call(this, props));
-    }
+        var _this = _possibleConstructorReturn(this, (TextEditor.__proto__ || Object.getPrototypeOf(TextEditor)).call(this));
 
-    _createClass(TextEditor, [{
-        key: "Render",
-        value: function Render() {}
-    }]);
+        _this.Slot('default', _this.RenderTemplate(template));
+        return _this;
+    }
 
     return TextEditor;
 }(_Window2.Window);

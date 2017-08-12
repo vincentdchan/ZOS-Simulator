@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     //         windowsManager={wm} />
     // </div>,
     //     document.getElementById('world'));
-    let my_window = new Window();
+    let my_window = new TextEditor();
 
     let world = document.getElementById('world');
     world.appendChild(my_window.dom);

@@ -27,7 +27,7 @@ export class Component {
         parser.parseComplete(template);
         // console.log(JSON.stringify(handle.dom, null, 2));
         let doms = this.vListToDomList(handle.dom);
-        this._dom = doms[0];
+        return doms[0];
     }
 
     vListToDomList(vlist) {
@@ -42,8 +42,10 @@ export class Component {
                         if ("attribs" in dom_node && "name" in dom_node.attribs) {
                             let slot_name = dom_node.attribs.name;
                             this._slot[slot_name] = dom;
+                            dom.setAttribute('data-slot-name', slot_name);
                         } else {
                             this._slot['default'] = dom;
+                            dom.setAttribute('data-slot-name', 'default');
                         }
                     } else {
                         dom = document.createElement(dom_node.name);
@@ -73,8 +75,8 @@ export class Component {
         })
     }
 
-    Slot(value) {
-        this._dom.appendChild(value);
+    Slot(name, value) {
+        this._slot[name].appendChild(value);
     }
 
 }
@@ -102,7 +104,7 @@ export class Window extends Component {
 
     constructor() {
         super();
-        this.RenderTemplate(window_template);
+        this._dom = this.RenderTemplate(window_template);
 
         this.x = 16;
         this.y = 16;
