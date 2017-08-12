@@ -1,3 +1,8 @@
+/************************ 
+ * Author: DZ Chan 
+ * Date:   2017-08-12 
+ ************************/
+
 import {Window} from "../Windows/Window"
 import style from "../stylesheets/textEditor.scss"
 

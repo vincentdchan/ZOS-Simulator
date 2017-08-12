@@ -1,3 +1,8 @@
+/************************ 
+ * Author: DZ Chan 
+ * Date:   2017-08-12 
+ ************************/
+
 const {VirtualLine}  = require("./VirtualLine.js")
 import {WindowsManager} from "./Windows/WindowsManager.js"
 import {Window, Component} from "./Windows/Window"

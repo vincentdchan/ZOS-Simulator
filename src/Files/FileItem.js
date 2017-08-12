@@ -1,3 +1,8 @@
+/************************ 
+ * Author: DZ Chan 
+ * Date:   2017-08-12 
+ ************************/
+
 import style from "../stylesheets/file.scss"
 import {Component} from "../Windows/Window"
 

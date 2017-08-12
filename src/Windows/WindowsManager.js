@@ -1,3 +1,8 @@
+/************************ 
+ * Author: DZ Chan 
+ * Date:   2017-08-12 
+ ************************/
+
 import {Emitter} from "../Emitter"
 
 export class WindowsManager extends Emitter {
