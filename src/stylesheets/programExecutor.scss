@@ -24,7 +24,7 @@
         .gutter {
             display: inline-block;
             background-color: lightgrey;
-            width: 42px;
+            width: 52px;
             text-align: right;
             padding-right: 8px;
         }
@@ -35,7 +35,8 @@
         }
     }
 
-    .variable-area {
+    .watcher {
+        height: 99%;
 
         .title {
             font-size: 14px;
@@ -59,6 +60,14 @@
             text-decoration: underline;
         }
 
+    }
+
+    .variable-area {
+        height: 60%;
+    }
+
+    .constant-area {
+        height: 40%;
     }
 
     .code-area {

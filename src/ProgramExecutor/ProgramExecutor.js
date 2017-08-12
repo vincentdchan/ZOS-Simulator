@@ -31,10 +31,22 @@ const template = `<div ref="frame" class="program-executor">
                 <div class="gutter">2</div>
                 <div class="content">ADD 3</div>
             </div>
+            <div class="line">
+                <div class="gutter">3</div>
+                <div class="content"></div>
+            </div>
         </div>
-        <div class="col-4">
+        <div class="col-4 watcher">
             <div class="variable-area" ref="variableArea">
-                <div class="title">Variable Watcher</div>
+                <div class="title unselectable">Variable Watcher</div>
+                <div class="content">
+                    <div><span class="variable">a</span>: 3</div>
+                    <div><span class="variable">a</span>: 3</div>
+                    <div><span class="variable">a</span>: 3</div>
+                </div>
+            </div>
+            <div class="constant-area" ref="variableArea">
+                <div class="title unselectable">Constant Watcher</div>
                 <div class="content">
                     <div><span class="variable">a</span>: 3</div>
                     <div><span class="variable">a</span>: 3</div>
