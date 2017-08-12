@@ -17,7 +17,7 @@ export class FileWindow extends Window {
         fi1.fileType = "text";
         fi1.filename = "text1.txt";
         let fi2 = new FileItem();
-        fi2.fileType = "bolder";
+        fi2.fileType = "folder";
         fi2.filename = "abc";
 
         this.$refs.fileContainer.appendChild(fi1.dom);

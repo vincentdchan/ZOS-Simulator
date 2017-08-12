@@ -2134,7 +2134,7 @@ var FileWindow = exports.FileWindow = function (_Window) {
         fi1.fileType = "text";
         fi1.filename = "text1.txt";
         var fi2 = new _FileItem.FileItem();
-        fi2.fileType = "bolder";
+        fi2.fileType = "folder";
         fi2.filename = "abc";
 
         _this.$refs.fileContainer.appendChild(fi1.dom);
@@ -2190,7 +2190,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var template = "<div class=\"file-item\">\n    <img ref=\"iconimg\" class=\"file-icon\" src=\"assets/images/Folder-icon.png\" />\n    <p class=\"filename\" ref=\"filename\"></p>\n</div>";
+var template = "<div class=\"file-item\">\n    <img ref=\"iconimg\" class=\"file-icon\" />\n    <p class=\"filename\" ref=\"filename\"></p>\n</div>";
 
 var FileItem = exports.FileItem = function (_Component) {
     _inherits(FileItem, _Component);
@@ -2201,7 +2201,6 @@ var FileItem = exports.FileItem = function (_Component) {
         var _this = _possibleConstructorReturn(this, (FileItem.__proto__ || Object.getPrototypeOf(FileItem)).call(this));
 
         _this._dom = _this.RenderTemplate(template);
-        _this.fileType = "folder";
         return _this;
     }
 
@@ -2214,9 +2213,9 @@ var FileItem = exports.FileItem = function (_Component) {
             this._fileType = value;
 
             if (this._fileType == "folder") {
-                this.$refs.iconimg.setAttribute("file-icon", "assets/images/Folder-icon.png");
+                this.$refs.iconimg.setAttribute("src", "assets/images/Folder-icon.png");
             } else {
-                this.$refs.iconimg.setAttribute("file-icon", "assets/images/Text-Document-icon.png");
+                this.$refs.iconimg.setAttribute("src", "assets/images/Text-Document-icon.png");
             }
         }
     }, {

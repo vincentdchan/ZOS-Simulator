@@ -2,7 +2,7 @@ import style from "../stylesheets/file.scss"
 import {Component} from "../Windows/Window"
 
 const template = `<div class="file-item">
-    <img ref="iconimg" class="file-icon" src="assets/images/Folder-icon.png" />
+    <img ref="iconimg" class="file-icon" />
     <p class="filename" ref="filename"></p>
 </div>`
 
@@ -11,7 +11,6 @@ export class FileItem extends Component {
     constructor() {
         super();
         this._dom = this.RenderTemplate(template);
-        this.fileType = "folder";
     }
 
     get fileType() {
@@ -22,9 +21,9 @@ export class FileItem extends Component {
         this._fileType = value;
 
         if (this._fileType == "folder") {
-            this.$refs.iconimg.setAttribute("file-icon", "assets/images/Folder-icon.png");
+            this.$refs.iconimg.setAttribute("src", "assets/images/Folder-icon.png");
         } else {
-            this.$refs.iconimg.setAttribute("file-icon", "assets/images/Text-Document-icon.png");
+            this.$refs.iconimg.setAttribute("src", "assets/images/Text-Document-icon.png");
         }
     }
 
