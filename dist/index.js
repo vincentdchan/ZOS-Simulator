@@ -1092,7 +1092,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".unselectable {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none; }\n\n.glowing-border {\n  outline: none;\n  border-color: #9ecaed;\n  box-shadow: 0 0 20px #49afff; }\n\n.window {\n  position: fixed;\n  background-color: white;\n  border-style: solid;\n  border-width: 2px;\n  border-color: white; }\n  .window .titleBar {\n    width: 100%;\n    background-color: lightblue;\n    height: 16px; }\n    .window .titleBar .name {\n      font-size: 14px;\n      color: black;\n      margin: 0px;\n      cursor: default; }\n    .window .titleBar p {\n      line-height: 16px; }\n  .window .right {\n    position: absolute;\n    right: 0px;\n    font-size: 14px;\n    line-height: 16px; }\n  .window .right:hover {\n    background-color: white;\n    color: lightblue; }\n", ""]);
+exports.push([module.i, ".unselectable {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none; }\n\n.undraggable {\n  user-drag: none;\n  user-select: none;\n  -moz-user-select: none;\n  -webkit-user-drag: none;\n  -webkit-user-select: none;\n  -ms-user-select: none; }\n\n* {\n  box-sizing: border-box; }\n\n.col-1 {\n  width: 8.33%; }\n\n.col-2 {\n  width: 16.66%; }\n\n.col-3 {\n  width: 25%; }\n\n.col-4 {\n  width: 33.33%; }\n\n.col-5 {\n  width: 41.66%; }\n\n.col-6 {\n  width: 50%; }\n\n.col-7 {\n  width: 58.33%; }\n\n.col-8 {\n  width: 66.66%; }\n\n.col-9 {\n  width: 75%; }\n\n.col-10 {\n  width: 83.33%; }\n\n.col-11 {\n  width: 91.66%; }\n\n.col-12 {\n  width: 100%; }\n\n[class*=\"col-\"] {\n  float: left; }\n\n.row::after {\n  content: \"\";\n  clear: both;\n  display: table; }\n\n.glowing-border {\n  outline: none;\n  border-color: #9ecaed;\n  box-shadow: 0 0 20px #49afff; }\n\n.window {\n  position: fixed;\n  background-color: white;\n  border-style: solid;\n  border-width: 2px;\n  border-color: white; }\n  .window .titleBar {\n    width: 100%;\n    background-color: lightblue;\n    height: 16px; }\n    .window .titleBar .name {\n      font-size: 14px;\n      color: black;\n      margin: 0px;\n      cursor: default; }\n    .window .titleBar p {\n      line-height: 16px; }\n  .window .right {\n    position: absolute;\n    right: 0px;\n    font-size: 14px;\n    line-height: 16px; }\n  .window .right:hover {\n    background-color: white;\n    color: lightblue; }\n", ""]);
 
 // exports
 
@@ -2314,6 +2314,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ProgramExecutor = undefined;
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _Window2 = __webpack_require__(0);
 
 var _programExecutor = __webpack_require__(19);
@@ -2331,7 +2333,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * Date:   2017-08-12 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ************************/
 
-var template = "<div class=\"program-executor\">\n    <div class=\"toolbar unselectable\">\n        <div class=\"item\">\n            <img src=\"assets/images/exe/run.png\" />\n        </div>\n        <div class=\"item\">\n            <img src=\"assets/images/exe/pause.png\" />\n        </div>\n        <div class=\"item\">\n            <img src=\"assets/images/exe/stop.png\" />\n        </div>\n        <div class=\"item\">\n            <img src=\"assets/images/exe/step-forward.png\" />\n        </div>\n    </div>\n    <table class=\"main-table\">\n        <tbody>\n            <tr>\n                <td>\n                    <div class=\"line\">\n                        <div class=\"gutter\">1</div>\n                        <div>ADD 3</div>\n                    </div>\n                </td>\n                <td>\n                    <div>\n                        <div>a: 3</div>\n                        <div>a: 3</div>\n                        <div>a: 3</div>\n                    </div>\n                </td>\n            </tr>\n        </tbody>\n    </table>\n</div>";
+var template = "<div ref=\"frame\" class=\"program-executor\">\n    <div class=\"toolbar unselectable\">\n        <div ref=\"runBtn\" class=\"item\">\n            <img class=\"undraggable\" src=\"assets/images/exe/run.png\" />\n        </div>\n        <div ref=\"pauseBtn\" class=\"item\">\n            <img class=\"undraggable\" src=\"assets/images/exe/pause.png\" />\n        </div>\n        <div ref=\"stopBtn\" class=\"item\">\n            <img class=\"undraggable\" src=\"assets/images/exe/stop.png\" />\n        </div>\n        <div ref=\"stepForwardBtn\" class=\"item\">\n            <img class=\"undraggable\" src=\"assets/images/exe/step-forward.png\" />\n        </div>\n    </div>\n    <div class=\"main-table row\" ref=\"programFrame\">\n        <div class=\"col-8 code-area\">\n            <div class=\"line\">\n                <div class=\"gutter\">1</div>\n                <div class=\"content\">ADD R1, 3, 2</div>\n            </div>\n            <div class=\"line\">\n                <div class=\"gutter\">2</div>\n                <div class=\"content\">ADD 3</div>\n            </div>\n        </div>\n        <div class=\"col-4\">\n            <div class=\"variable-area\" ref=\"variableArea\">\n                <div class=\"title\">Variable Watcher</div>\n                <div class=\"content\">\n                    <div><span class=\"variable\">a</span>: 3</div>\n                    <div><span class=\"variable\">a</span>: 3</div>\n                    <div><span class=\"variable\">a</span>: 3</div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>";
+
+var source_code = "\nADD     R1,  1,  1\nADD     R2, R1,  1\nLOAD    R3, R2,  0\nSTORE   R1, R3,  0\n";
 
 var ProgramExecutor = exports.ProgramExecutor = function (_Window) {
     _inherits(ProgramExecutor, _Window);
@@ -2342,8 +2346,42 @@ var ProgramExecutor = exports.ProgramExecutor = function (_Window) {
         var _this = _possibleConstructorReturn(this, (ProgramExecutor.__proto__ || Object.getPrototypeOf(ProgramExecutor)).call(this, wm));
 
         _this.Slot('default', _this.RenderTemplate(template));
+        _this.width = 640;
+        _this.height = 480;
+
+        _this.$refs.frame.style.height = _this.height - 16 + 'px';
+        _this.$refs.programFrame.style.height = _this.height - 16 - 48 + 'px';
+
+        _this.$refs.runBtn.addEventListener('click', function (e) {
+            return _this.onRunClicked(e);
+        });
+        _this.$refs.pauseBtn.addEventListener('click', function (e) {
+            return _this.onPauseClicked(e);
+        });
+        _this.$refs.stopBtn.addEventListener('click', function (e) {
+            return _this.onStopClicked(e);
+        });
+        _this.$refs.stepForwardBtn.addEventListener('click', function (e) {
+            return _this.onStepForwardClicked(e);
+        });
+
+        _this.title = "Program Executor";
         return _this;
     }
+
+    _createClass(ProgramExecutor, [{
+        key: "onRunClicked",
+        value: function onRunClicked(event) {}
+    }, {
+        key: "onPauseClicked",
+        value: function onPauseClicked(event) {}
+    }, {
+        key: "onStopClicked",
+        value: function onStopClicked(event) {}
+    }, {
+        key: "onStepForwardClicked",
+        value: function onStepForwardClicked(event) {}
+    }]);
 
     return ProgramExecutor;
 }(_Window2.Window);
@@ -2388,7 +2426,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".program-executor .toolbar {\n  height: 48px; }\n  .program-executor .toolbar .item {\n    display: inline-block; }\n    .program-executor .toolbar .item img {\n      width: 48px;\n      height: 48px; }\n  .program-executor .toolbar .item:hover {\n    background: lightblue; }\n", ""]);
+exports.push([module.i, ".program-executor .toolbar {\n  height: 48px; }\n  .program-executor .toolbar .item {\n    display: inline-block; }\n    .program-executor .toolbar .item img {\n      width: 48px;\n      height: 48px; }\n  .program-executor .toolbar .item:hover {\n    background: lightblue; }\n\n.program-executor .line {\n  height: 18px; }\n  .program-executor .line .gutter {\n    display: inline-block;\n    background-color: lightgrey;\n    width: 42px;\n    text-align: right;\n    padding-right: 8px; }\n  .program-executor .line .content {\n    display: inline-block;\n    padding-left: 16px; }\n\n.program-executor .variable-area .title {\n  font-size: 14px;\n  padding-top: 2px;\n  padding-bottom: 2px;\n  padding-left: 4px;\n  padding-right: 4px;\n  background-color: lightgrey; }\n\n.program-executor .variable-area .content {\n  padding: 4px; }\n\n.program-executor .variable-area .variable {\n  color: #6161FF;\n  cursor: default; }\n\n.program-executor .variable-area .variable:hover {\n  text-decoration: underline; }\n\n.program-executor .code-area {\n  height: 99%;\n  overflow-y: scroll; }\n", ""]);
 
 // exports
 
