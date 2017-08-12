@@ -102,7 +102,7 @@ const window_template = `<div class="window" ref="frame">
 
 export class Window extends Component {
 
-    constructor() {
+    constructor(wm) {
         super();
         this._dom = this.RenderTemplate(window_template);
 
@@ -111,70 +111,41 @@ export class Window extends Component {
         this.width = 400;
         this.height = 300;
         this.title = "Window";
-        // super(props);
+        this.titleBarPressed = false;
+        this._focused = false;
+        this.wm = wm;
+        this.zIndex = this.wm.zIndexCounter();
 
-        // this.titleBarPressed = false;
-
-        // this.windowsManager = props.windowsManager;
-        // this.windowsID = this.windowsManager.GetNewId();
-        // this.windowsManager.addEventListener("focusedWindowChanged", (id) => {
-        //     if (id === this.windowsID) {
-        //         this.focus();
-        //     } else {
-        //         this.unfocus();
-        //     }
-        // });
+        this.windowsID = this.wm.GetNewId();
+        this.wm.addEventListener("focusedWindowChanged", (id) => {
+            if (id === this.windowsID) {
+                this.focus();
+            } else {
+                this.unfocus();
+            }
+        });
         window.addEventListener("mousemove", (event) => this.onMouseMove(event));
 
-        // this.state = {
-        //     x: 16,
-        //     y: 16,
-        //     width: 400,
-        //     height: 300,
-        //     zIndex: this.windowsManager.zIndexCounter(),
-        //     focused: false,
-        // };
         this.$refs.titlebar.addEventListener('mouseup', (e) => this.onTitleBarMouseUp(e));
         this.$refs.titlebar.addEventListener('mousedown', (e) => this.onTitleBarMouseDown(e));
+        this._dom.addEventListener('mousedown', (e) => this.onMouseDown(e));
     }
 
     focus() {
-        if (!this.state.focused) {
-            this.setState({
-                focused: true,
-                zIndex: this.windowsManager.zIndexCounter(),
-            });
+        if (!this._focused) {
+            this._focused = true;
+            this.zIndex = this.wm.zIndexCounter(); 
+            this._dom.classList.add('glowing-border');
         }
     }
 
     unfocus() {
-        this.setState({
-            focused: false
-        });
-    }
-
-    render() {
-        // const myStyle = {
-        //     left: this.state.x + "px",
-        //     top: this.state.y + "px",
-        //     width: this.state.width + "px",
-        //     height: this.state.height + "px",
-        //     zIndex: this.state.zIndex,
-        // };
-        // let classList = "window";
-        // if (this.state.focused) {
-        //     classList += " glowing-border";
-        // }
-        // return <div className={classList} style={myStyle} onMouseDown={this.onMouseDown.bind(this)}>
-        //     <TitleBar name={this.props.titleName}
-        //     onMouseUp={this.onTitleBarMouseUp.bind(this)} 
-        //     onMouseDown={this.onTitleBarMouseDown.bind(this)}  />
-        //     <div>{ this.props.children }</div>
-        // </div>
+        this._focused = false;
+        this._dom.classList.remove('glowing-border');
     }
 
     onMouseDown(event) {
-        this.windowsManager.FocusWindow(this.windowsID);
+        this.wm.FocusWindow(this.windowsID);
     }
 
     onMouseMove(event) {
@@ -195,9 +166,7 @@ export class Window extends Component {
             y: event.clientY - this.y,
         };
 
-        // this.setState({
-        //     zIndex: this.windowsManager.zIndexCounter(),
-        // });
+        this.zIndex = this.wm.zIndexCounter();
     }
 
     onTitleBarMouseUp(event) {
@@ -259,16 +228,15 @@ export class Window extends Component {
         }
     }
 
+    get zIndex() {
+        return this._zIndex;
+    }
+
+    set zIndex(value) {
+        if (this._zIndex !== value) {
+            this._zIndex = value;
+            this._dom.style.zIndex = value + 'px';
+        }
+    }
+
 }
-
-
-// Component.RegisterTemplate('window', `
-// <div class="window">
-//     <title-bar />
-//     <div>
-//         <slot />
-//     </div>
-// </div>
-// `)
-
-// Component.RegisterTemplate('title-bar', titlebar_tamplate);

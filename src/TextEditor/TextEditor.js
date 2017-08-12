@@ -11,8 +11,8 @@ const template = `<div class="text-editor">
 
 export class TextEditor extends Window {
 
-    constructor() {
-        super();
+    constructor(wm) {
+        super(wm);
         this.Slot('default', this.RenderTemplate(template));
     }
 

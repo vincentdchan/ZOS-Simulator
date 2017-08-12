@@ -208,7 +208,7 @@ var window_template = "<div class=\"window\" ref=\"frame\">\n    <div class=\"ti
 var Window = exports.Window = function (_Component2) {
     _inherits(Window, _Component2);
 
-    function Window() {
+    function Window(wm) {
         _classCallCheck(this, Window);
 
         var _this3 = _possibleConstructorReturn(this, (Window.__proto__ || Object.getPrototypeOf(Window)).call(this));
@@ -220,36 +220,31 @@ var Window = exports.Window = function (_Component2) {
         _this3.width = 400;
         _this3.height = 300;
         _this3.title = "Window";
-        // super(props);
+        _this3.titleBarPressed = false;
+        _this3._focused = false;
+        _this3.wm = wm;
+        _this3.zIndex = _this3.wm.zIndexCounter();
 
-        // this.titleBarPressed = false;
-
-        // this.windowsManager = props.windowsManager;
-        // this.windowsID = this.windowsManager.GetNewId();
-        // this.windowsManager.addEventListener("focusedWindowChanged", (id) => {
-        //     if (id === this.windowsID) {
-        //         this.focus();
-        //     } else {
-        //         this.unfocus();
-        //     }
-        // });
+        _this3.windowsID = _this3.wm.GetNewId();
+        _this3.wm.addEventListener("focusedWindowChanged", function (id) {
+            if (id === _this3.windowsID) {
+                _this3.focus();
+            } else {
+                _this3.unfocus();
+            }
+        });
         window.addEventListener("mousemove", function (event) {
             return _this3.onMouseMove(event);
         });
 
-        // this.state = {
-        //     x: 16,
-        //     y: 16,
-        //     width: 400,
-        //     height: 300,
-        //     zIndex: this.windowsManager.zIndexCounter(),
-        //     focused: false,
-        // };
         _this3.$refs.titlebar.addEventListener('mouseup', function (e) {
             return _this3.onTitleBarMouseUp(e);
         });
         _this3.$refs.titlebar.addEventListener('mousedown', function (e) {
             return _this3.onTitleBarMouseDown(e);
+        });
+        _this3._dom.addEventListener('mousedown', function (e) {
+            return _this3.onMouseDown(e);
         });
         return _this3;
     }
@@ -257,45 +252,22 @@ var Window = exports.Window = function (_Component2) {
     _createClass(Window, [{
         key: "focus",
         value: function focus() {
-            if (!this.state.focused) {
-                this.setState({
-                    focused: true,
-                    zIndex: this.windowsManager.zIndexCounter()
-                });
+            if (!this._focused) {
+                this._focused = true;
+                this.zIndex = this.wm.zIndexCounter();
+                this._dom.classList.add('glowing-border');
             }
         }
     }, {
         key: "unfocus",
         value: function unfocus() {
-            this.setState({
-                focused: false
-            });
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            // const myStyle = {
-            //     left: this.state.x + "px",
-            //     top: this.state.y + "px",
-            //     width: this.state.width + "px",
-            //     height: this.state.height + "px",
-            //     zIndex: this.state.zIndex,
-            // };
-            // let classList = "window";
-            // if (this.state.focused) {
-            //     classList += " glowing-border";
-            // }
-            // return <div className={classList} style={myStyle} onMouseDown={this.onMouseDown.bind(this)}>
-            //     <TitleBar name={this.props.titleName}
-            //     onMouseUp={this.onTitleBarMouseUp.bind(this)} 
-            //     onMouseDown={this.onTitleBarMouseDown.bind(this)}  />
-            //     <div>{ this.props.children }</div>
-            // </div>
+            this._focused = false;
+            this._dom.classList.remove('glowing-border');
         }
     }, {
         key: "onMouseDown",
         value: function onMouseDown(event) {
-            this.windowsManager.FocusWindow(this.windowsID);
+            this.wm.FocusWindow(this.windowsID);
         }
     }, {
         key: "onMouseMove",
@@ -316,9 +288,7 @@ var Window = exports.Window = function (_Component2) {
                 y: event.clientY - this.y
             };
 
-            // this.setState({
-            //     zIndex: this.windowsManager.zIndexCounter(),
-            // });
+            this.zIndex = this.wm.zIndexCounter();
         }
     }, {
         key: "onTitleBarMouseUp",
@@ -380,21 +350,21 @@ var Window = exports.Window = function (_Component2) {
                 this._dom.style.height = value + 'px';
             }
         }
+    }, {
+        key: "zIndex",
+        get: function get() {
+            return this._zIndex;
+        },
+        set: function set(value) {
+            if (this._zIndex !== value) {
+                this._zIndex = value;
+                this._dom.style.zIndex = value + 'px';
+            }
+        }
     }]);
 
     return Window;
 }(Component);
-
-// Component.RegisterTemplate('window', `
-// <div class="window">
-//     <title-bar />
-//     <div>
-//         <slot />
-//     </div>
-// </div>
-// `)
-
-// Component.RegisterTemplate('title-bar', titlebar_tamplate);
 
 /***/ }),
 /* 1 */
@@ -942,7 +912,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     //         windowsManager={wm} />
     // </div>,
     //     document.getElementById('world'));
-    var my_window = new _TextEditor.TextEditor();
+    var my_window = new _TextEditor.TextEditor(wm);
 
     var world = document.getElementById('world');
     world.appendChild(my_window.dom);
@@ -2063,10 +2033,10 @@ var template = "<div class=\"text-editor\">\n    <div class=\"toolbar\">\n      
 var TextEditor = exports.TextEditor = function (_Window) {
     _inherits(TextEditor, _Window);
 
-    function TextEditor() {
+    function TextEditor(wm) {
         _classCallCheck(this, TextEditor);
 
-        var _this = _possibleConstructorReturn(this, (TextEditor.__proto__ || Object.getPrototypeOf(TextEditor)).call(this));
+        var _this = _possibleConstructorReturn(this, (TextEditor.__proto__ || Object.getPrototypeOf(TextEditor)).call(this, wm));
 
         _this.Slot('default', _this.RenderTemplate(template));
         return _this;
