@@ -33,9 +33,6 @@
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 /******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -63,23 +60,11 @@
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
-
-module.exports = React;
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-module.exports = ReactDOM;
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -92,28 +77,26 @@ exports.Window = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(1);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _main = __webpack_require__(14);
+var _main = __webpack_require__(7);
 
 var _main2 = _interopRequireDefault(_main);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var TitleBar = function (_React$Component) {
-    _inherits(TitleBar, _React$Component);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var titlebar_tamplate = "\n<div className=\"titleBar unselectable\" onMouseDown={this.props.onMouseDown} \n    onMouseUp={this.props.onMouseUp} >\n    <div className=\"right\">\n        <i className=\"fa fa-window-close\" aria-hidden=\"true\"></i>\n    </div>\n    <p className=\"name\">{ this.props.name }</p>\n</div>\n";
+
+var Component = function Component() {
+    _classCallCheck(this, Component);
+};
+
+var TitleBar = function (_Component) {
+    _inherits(TitleBar, _Component);
 
     function TitleBar() {
         _classCallCheck(this, TitleBar);
@@ -122,61 +105,43 @@ var TitleBar = function (_React$Component) {
     }
 
     _createClass(TitleBar, [{
-        key: "render",
-        value: function render() {
-            return _react2.default.createElement(
-                "div",
-                { className: "titleBar unselectable", onMouseDown: this.props.onMouseDown,
-                    onMouseUp: this.props.onMouseUp },
-                _react2.default.createElement(
-                    "div",
-                    { className: "right" },
-                    _react2.default.createElement("i", { className: "fa fa-window-close", "aria-hidden": "true" })
-                ),
-                _react2.default.createElement(
-                    "p",
-                    { className: "name" },
-                    this.props.name
-                )
-            );
-        }
+        key: "Render",
+        value: function Render() {}
     }]);
 
     return TitleBar;
-}(_react2.default.Component);
+}(Component);
 
-var Window = exports.Window = function (_React$Component2) {
-    _inherits(Window, _React$Component2);
+var Window = exports.Window = function (_Component2) {
+    _inherits(Window, _Component2);
 
-    function Window(props) {
+    function Window() {
         _classCallCheck(this, Window);
 
-        var _this2 = _possibleConstructorReturn(this, (Window.__proto__ || Object.getPrototypeOf(Window)).call(this, props));
+        return _possibleConstructorReturn(this, (Window.__proto__ || Object.getPrototypeOf(Window)).call(this));
+        // super(props);
 
-        _this2.titleBarPressed = false;
+        // this.titleBarPressed = false;
 
-        _this2.windowsManager = props.windowsManager;
-        _this2.windowsID = _this2.windowsManager.GetNewId();
-        _this2.windowsManager.addEventListener("focusedWindowChanged", function (id) {
-            if (id === _this2.windowsID) {
-                _this2.focus();
-            } else {
-                _this2.unfocus();
-            }
-        });
-        window.addEventListener("mousemove", function (event) {
-            return _this2.onMouseMove(event);
-        });
+        // this.windowsManager = props.windowsManager;
+        // this.windowsID = this.windowsManager.GetNewId();
+        // this.windowsManager.addEventListener("focusedWindowChanged", (id) => {
+        //     if (id === this.windowsID) {
+        //         this.focus();
+        //     } else {
+        //         this.unfocus();
+        //     }
+        // });
+        // window.addEventListener("mousemove", (event) => this.onMouseMove(event));
 
-        _this2.state = {
-            x: 16,
-            y: 16,
-            width: 400,
-            height: 300,
-            zIndex: _this2.windowsManager.zIndexCounter(),
-            focused: false
-        };
-        return _this2;
+        // this.state = {
+        //     x: 16,
+        //     y: 16,
+        //     width: 400,
+        //     height: 300,
+        //     zIndex: this.windowsManager.zIndexCounter(),
+        //     focused: false,
+        // };
     }
 
     _createClass(Window, [{
@@ -199,29 +164,23 @@ var Window = exports.Window = function (_React$Component2) {
     }, {
         key: "render",
         value: function render() {
-            var myStyle = {
-                left: this.state.x + "px",
-                top: this.state.y + "px",
-                width: this.state.width + "px",
-                height: this.state.height + "px",
-                zIndex: this.state.zIndex
-            };
-            var classList = "window";
-            if (this.state.focused) {
-                classList += " glowing-border";
-            }
-            return _react2.default.createElement(
-                "div",
-                { className: classList, style: myStyle, onMouseDown: this.onMouseDown.bind(this) },
-                _react2.default.createElement(TitleBar, { name: this.props.titleName,
-                    onMouseUp: this.onTitleBarMouseUp.bind(this),
-                    onMouseDown: this.onTitleBarMouseDown.bind(this) }),
-                _react2.default.createElement(
-                    "div",
-                    null,
-                    this.props.children
-                )
-            );
+            // const myStyle = {
+            //     left: this.state.x + "px",
+            //     top: this.state.y + "px",
+            //     width: this.state.width + "px",
+            //     height: this.state.height + "px",
+            //     zIndex: this.state.zIndex,
+            // };
+            // let classList = "window";
+            // if (this.state.focused) {
+            //     classList += " glowing-border";
+            // }
+            // return <div className={classList} style={myStyle} onMouseDown={this.onMouseDown.bind(this)}>
+            //     <TitleBar name={this.props.titleName}
+            //     onMouseUp={this.onTitleBarMouseUp.bind(this)} 
+            //     onMouseDown={this.onTitleBarMouseDown.bind(this)}  />
+            //     <div>{ this.props.children }</div>
+            // </div>
         }
     }, {
         key: "onMouseDown",
@@ -263,10 +222,10 @@ var Window = exports.Window = function (_React$Component2) {
     }]);
 
     return Window;
-}(_react2.default.Component);
+}(Component);
 
 /***/ }),
-/* 3 */
+/* 1 */
 /***/ (function(module, exports) {
 
 /*
@@ -348,7 +307,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 4 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -394,7 +353,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(15);
+var	fixUrls = __webpack_require__(9);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -707,31 +666,30 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 5 */
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(4);
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _WindowsManager = __webpack_require__(10);
+var _WindowsManager = __webpack_require__(5);
 
-var _Window = __webpack_require__(2);
+var _Window = __webpack_require__(0);
 
-var _TextEditor = __webpack_require__(17);
+var _TextEditor = __webpack_require__(10);
 
-var _FileWindow = __webpack_require__(8);
+var _FileWindow = __webpack_require__(13);
 
-var _react = __webpack_require__(0);
+var _ProgramExecutor = __webpack_require__(19);
 
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(1);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var _require = __webpack_require__(9),
+var _require = __webpack_require__(22),
     VirtualLine = _require.VirtualLine;
 
 var measure_font = "船";
@@ -800,17 +758,85 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     var wm = new _WindowsManager.WindowsManager();
 
-    _reactDom2.default.render(_react2.default.createElement(
-        "div",
-        null,
-        _react2.default.createElement(_TextEditor.TextEditor, {
-            titleName: "Untitled 2",
-            windowsManager: wm }),
-        _react2.default.createElement(_FileWindow.FileWindow, {
-            titleName: "File Manager",
-            windowsManager: wm })
-    ), document.getElementById('world'));
+    // ReactDOM.render(<div>
+    //     <TextEditor 
+    //         titleName="Untitled 2"
+    //         windowsManager={wm} />
+    //     <FileWindow 
+    //         titleName="File Manager"
+    //         windowsManager={wm} />
+    //     <ProgramExecutor 
+    //         titleName="ProgramExecutor"
+    //         windowsManager={wm} />
+    // </div>,
+    //     document.getElementById('world'));
 });
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.WindowsManager = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Emitter2 = __webpack_require__(6);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var WindowsManager = exports.WindowsManager = function (_Emitter) {
+    _inherits(WindowsManager, _Emitter);
+
+    function WindowsManager() {
+        _classCallCheck(this, WindowsManager);
+
+        var _this = _possibleConstructorReturn(this, (WindowsManager.__proto__ || Object.getPrototypeOf(WindowsManager)).call(this));
+
+        _this._id_counter = 0;
+        _this._focused_id = 0;
+
+        var zIndex = 0;
+        _this.zIndexCounter = function () {
+            return zIndex++;
+        };
+        return _this;
+    }
+
+    _createClass(WindowsManager, [{
+        key: "GetZIndexCounter",
+        value: function GetZIndexCounter() {
+            return this.zIndexCounter;
+        }
+    }, {
+        key: "FocusWindow",
+        value: function FocusWindow(id) {
+            this._focused_id = id;
+            this.emit("focusedWindowChanged", id);
+        }
+    }, {
+        key: "GetFocusedId",
+        value: function GetFocusedId() {
+            return this._focused_id;
+        }
+    }, {
+        key: "GetNewId",
+        value: function GetNewId() {
+            return this._id_counter++;
+        }
+    }]);
+
+    return WindowsManager;
+}(_Emitter2.Emitter);
 
 /***/ }),
 /* 6 */
@@ -864,6 +890,308 @@ var Emitter = exports.Emitter = function () {
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(8);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(2)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".unselectable {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none; }\n\n.glowing-border {\n  outline: none;\n  border-color: #9ecaed;\n  box-shadow: 0 0 20px #49afff; }\n\n.window {\n  position: fixed;\n  background-color: white;\n  border-style: solid;\n  border-width: 2px;\n  border-color: white; }\n  .window .titleBar {\n    width: 100%;\n    background-color: lightblue;\n    height: 16px; }\n    .window .titleBar .name {\n      font-size: 14px;\n      color: black;\n      margin: 0px;\n      cursor: default; }\n    .window .titleBar p {\n      line-height: 16px; }\n  .window .right {\n    position: absolute;\n    right: 0px;\n    font-size: 14px;\n    line-height: 16px; }\n  .window .right:hover {\n    background-color: white;\n    color: lightblue; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
+
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.TextEditor = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Window2 = __webpack_require__(0);
+
+var _textEditor = __webpack_require__(11);
+
+var _textEditor2 = _interopRequireDefault(_textEditor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var template = "\n<Window titleName={this.props.titleName} windowsManager={this.props.windowsManager}>\n    <div className=\"text-editor\">\n        <div className=\"toolbar\">\n            <span className=\"btn\"><i className=\"fa fa-file-text-o\" aria-hidden=\"true\"></i></span>\n            <span className=\"btn\"><i className=\"fa fa-floppy-o\" aria-hidden=\"true\"></i></span>\n        </div>\n        <textarea className=\"real-editor\"></textarea>\n    </div>\n</Window>\n";
+
+var TextEditor = exports.TextEditor = function (_Window) {
+    _inherits(TextEditor, _Window);
+
+    function TextEditor(props) {
+        _classCallCheck(this, TextEditor);
+
+        return _possibleConstructorReturn(this, (TextEditor.__proto__ || Object.getPrototypeOf(TextEditor)).call(this, props));
+    }
+
+    _createClass(TextEditor, [{
+        key: "Render",
+        value: function Render() {}
+    }]);
+
+    return TextEditor;
+}(_Window2.Window);
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(12);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(2)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./textEditor.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./textEditor.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".text-editor .toolbar {\n  height: 20px; }\n  .text-editor .toolbar .btn {\n    margin: 2px; }\n  .text-editor .toolbar .btn:hover {\n    background: lightblue; }\n\n.text-editor .real-editor {\n  height: 260px;\n  width: 396px; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.FileWindow = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Window = __webpack_require__(0);
+
+var _FileItem = __webpack_require__(14);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var template = "\n<Window titleName={this.props.titleName} windowsManager={this.props.windowsManager}>\n    <div className=\"pathContainer\">\n        <input type=\"text\" value={this.state.path} onChange={this.inputPathChanged.bind(this)} />\n    </div>\n    <div style={style} className=\"itemContainer unselectable\">\n        <FileItem fileType=\"text\" filename=\"text1.txt\" fileManager={this.fileManager} />\n        <FileItem fileType=\"text\" filename=\"text2.txt\" fileManager={this.fileManager} />\n        <FileItem fileType=\"folder\" filename=\"abc\" fileManager={this.fileManager} />\n    </div>\n</Window>\n";
+
+var FileWindow = exports.FileWindow = function () {
+    function FileWindow(props) {
+        _classCallCheck(this, FileWindow);
+
+        // super(props);
+
+        this.fileManager = props.fileManager;
+
+        this.state = {
+            path: "C:/"
+        };
+    }
+
+    _createClass(FileWindow, [{
+        key: "render",
+        value: function render() {
+            var style = {
+                height: 260 + "px"
+            };
+            return React.createElement(
+                _Window.Window,
+                { titleName: this.props.titleName, windowsManager: this.props.windowsManager },
+                React.createElement(
+                    "div",
+                    { className: "pathContainer" },
+                    React.createElement("input", { type: "text", value: this.state.path, onChange: this.inputPathChanged.bind(this) })
+                ),
+                React.createElement(
+                    "div",
+                    { style: style, className: "itemContainer unselectable" },
+                    React.createElement(_FileItem.FileItem, { fileType: "text", filename: "text1.txt", fileManager: this.fileManager }),
+                    React.createElement(_FileItem.FileItem, { fileType: "text", filename: "text2.txt", fileManager: this.fileManager }),
+                    React.createElement(_FileItem.FileItem, { fileType: "folder", filename: "abc", fileManager: this.fileManager })
+                )
+            );
+        }
+    }, {
+        key: "inputPathChanged",
+        value: function inputPathChanged(event) {
+            this.setState({
+                path: event.target.value
+            });
+        }
+    }]);
+
+    return FileWindow;
+}();
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
@@ -874,15 +1202,15 @@ exports.FileItem = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
+var _react = __webpack_require__(15);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(1);
+var _reactDom = __webpack_require__(16);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _file = __webpack_require__(13);
+var _file = __webpack_require__(17);
 
 var _file2 = _interopRequireDefault(_file);
 
@@ -893,6 +1221,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var template = "\n<div className=\"file-item\">\n    {this.GetIcon()}\n    <p className=\"filename\">{this.props.filename}</p>\n</div>\n";
 
 var FileItem = exports.FileItem = function (_React$Component) {
     _inherits(FileItem, _React$Component);
@@ -915,16 +1245,7 @@ var FileItem = exports.FileItem = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
-            return _react2.default.createElement(
-                "div",
-                { className: "file-item" },
-                this.GetIcon(),
-                _react2.default.createElement(
-                    "p",
-                    { className: "filename" },
-                    this.props.filename
-                )
-            );
+            return null;
         }
     }]);
 
@@ -932,7 +1253,64 @@ var FileItem = exports.FileItem = function (_React$Component) {
 }(_react2.default.Component);
 
 /***/ }),
-/* 8 */
+/* 15 */
+/***/ (function(module, exports) {
+
+module.exports = React;
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+module.exports = ReactDOM;
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(18);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(2)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./file.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./file.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".file-item {\n  display: inline-block;\n  width: 100px;\n  cursor: default; }\n  .file-item .file-icon {\n    width: 100px;\n    height: 100px; }\n  .file-item .filename {\n    color: grey;\n    margin: 0px;\n    text-align: center; }\n\n.file-item:hover {\n  background: lightblue; }\n\n.itemContainer {\n  overflow-y: scroll; }\n\n.pathContainer {\n  width: 100%; }\n  .pathContainer input {\n    width: 99%; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -941,21 +1319,15 @@ var FileItem = exports.FileItem = function (_React$Component) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.FileWindow = undefined;
+exports.ProgramExecutor = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
+var _Window2 = __webpack_require__(0);
 
-var _react2 = _interopRequireDefault(_react);
+var _programExecutor = __webpack_require__(20);
 
-var _reactDom = __webpack_require__(1);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _Window = __webpack_require__(2);
-
-var _FileItem = __webpack_require__(7);
+var _programExecutor2 = _interopRequireDefault(_programExecutor);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -965,59 +1337,74 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var FileWindow = exports.FileWindow = function (_React$Component) {
-    _inherits(FileWindow, _React$Component);
+var template = "\n<Window titleName={this.props.titleName} windowsManager={this.props.windowsManager}>\n    <div className=\"program-executor\">\n        <div className=\"toolbar unselectable\">\n            <div className=\"item\">\n                <img src=\"assets/images/exe/run.png\" />\n            </div>\n            <div className=\"item\">\n                <img src=\"assets/images/exe/pause.png\" />\n            </div>\n            <div className=\"item\">\n                <img src=\"assets/images/exe/stop.png\" />\n            </div>\n            <div className=\"item\">\n                <img src=\"assets/images/exe/step-forward.png\" />\n            </div>\n        </div>\n        <table className=\"main-table\">\n            <tbody>\n                <tr>\n                    <td>\n                        <div class=\"line\">\n                            <div class=\"gutter\">1</div>\n                            <div>ADD 3</div>\n                        </div>\n                    </td>\n                    <td>\n                        <div>\n                            <div>a: 3</div>\n                            <div>a: 3</div>\n                            <div>a: 3</div>\n                        </div>\n                    </td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n</Window>\n";
 
-    function FileWindow(props) {
-        _classCallCheck(this, FileWindow);
+var ProgramExecutor = exports.ProgramExecutor = function (_Window) {
+    _inherits(ProgramExecutor, _Window);
 
-        var _this = _possibleConstructorReturn(this, (FileWindow.__proto__ || Object.getPrototypeOf(FileWindow)).call(this, props));
+    function ProgramExecutor(props) {
+        _classCallCheck(this, ProgramExecutor);
 
-        _this.fileManager = props.fileManager;
-
-        _this.state = {
-            path: "C:/"
-        };
-        return _this;
+        return _possibleConstructorReturn(this, (ProgramExecutor.__proto__ || Object.getPrototypeOf(ProgramExecutor)).call(this, props));
     }
 
-    _createClass(FileWindow, [{
+    _createClass(ProgramExecutor, [{
         key: "render",
         value: function render() {
-            var style = {
-                height: 260 + "px"
-            };
-            return _react2.default.createElement(
-                _Window.Window,
-                { titleName: this.props.titleName, windowsManager: this.props.windowsManager },
-                _react2.default.createElement(
-                    "div",
-                    { className: "pathContainer" },
-                    _react2.default.createElement("input", { type: "text", value: this.state.path, onChange: this.inputPathChanged.bind(this) })
-                ),
-                _react2.default.createElement(
-                    "div",
-                    { style: style, className: "itemContainer unselectable" },
-                    _react2.default.createElement(_FileItem.FileItem, { fileType: "text", filename: "text1.txt", fileManager: this.fileManager }),
-                    _react2.default.createElement(_FileItem.FileItem, { fileType: "text", filename: "text2.txt", fileManager: this.fileManager }),
-                    _react2.default.createElement(_FileItem.FileItem, { fileType: "folder", filename: "abc", fileManager: this.fileManager })
-                )
-            );
-        }
-    }, {
-        key: "inputPathChanged",
-        value: function inputPathChanged(event) {
-            this.setState({
-                path: event.target.value
-            });
+            return null;
         }
     }]);
 
-    return FileWindow;
-}(_react2.default.Component);
+    return ProgramExecutor;
+}(_Window2.Window);
 
 /***/ }),
-/* 9 */
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(21);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(2)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./programExecutor.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./programExecutor.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".program-executor .toolbar {\n  height: 48px; }\n  .program-executor .toolbar .item {\n    display: inline-block; }\n    .program-executor .toolbar .item img {\n      width: 48px;\n      height: 48px; }\n  .program-executor .toolbar .item:hover {\n    background: lightblue; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1122,386 +1509,6 @@ var VirtualLine = exports.VirtualLine = function () {
 
     return VirtualLine;
 }();
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.WindowsManager = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _Emitter2 = __webpack_require__(6);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var WindowsManager = exports.WindowsManager = function (_Emitter) {
-    _inherits(WindowsManager, _Emitter);
-
-    function WindowsManager() {
-        _classCallCheck(this, WindowsManager);
-
-        var _this = _possibleConstructorReturn(this, (WindowsManager.__proto__ || Object.getPrototypeOf(WindowsManager)).call(this));
-
-        _this._id_counter = 0;
-        _this._focused_id = 0;
-
-        var zIndex = 0;
-        _this.zIndexCounter = function () {
-            return zIndex++;
-        };
-        return _this;
-    }
-
-    _createClass(WindowsManager, [{
-        key: "GetZIndexCounter",
-        value: function GetZIndexCounter() {
-            return this.zIndexCounter;
-        }
-    }, {
-        key: "FocusWindow",
-        value: function FocusWindow(id) {
-            this._focused_id = id;
-            this.emit("focusedWindowChanged", id);
-        }
-    }, {
-        key: "GetFocusedId",
-        value: function GetFocusedId() {
-            return this._focused_id;
-        }
-    }, {
-        key: "GetNewId",
-        value: function GetNewId() {
-            return this._id_counter++;
-        }
-    }]);
-
-    return WindowsManager;
-}(_Emitter2.Emitter);
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".file-item {\n  display: inline-block;\n  width: 100px;\n  cursor: default; }\n  .file-item .file-icon {\n    width: 100px;\n    height: 100px; }\n  .file-item .filename {\n    color: grey;\n    margin: 0px;\n    text-align: center; }\n\n.file-item:hover {\n  background: lightblue; }\n\n.itemContainer {\n  overflow-y: scroll; }\n\n.pathContainer {\n  width: 100%; }\n  .pathContainer input {\n    width: 99%; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".unselectable {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none; }\n\n.glowing-border {\n  outline: none;\n  border-color: #9ecaed;\n  box-shadow: 0 0 20px #49afff; }\n\n.window {\n  position: fixed;\n  background-color: white;\n  border-style: solid;\n  border-width: 2px;\n  border-color: white; }\n  .window .titleBar {\n    width: 100%;\n    background-color: lightblue;\n    height: 16px; }\n    .window .titleBar .name {\n      font-size: 14px;\n      color: black;\n      margin: 0px;\n      cursor: default; }\n  .window .right {\n    position: absolute;\n    right: 0px;\n    font-size: 14px; }\n  .window .right:hover {\n    background-color: white;\n    color: lightblue; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(11);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(4)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./file.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./file.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(12);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(4)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports) {
-
-
-/**
- * When source maps are enabled, `style-loader` uses a link element with a data-uri to
- * embed the css on the page. This breaks all relative urls because now they are relative to a
- * bundle instead of the current page.
- *
- * One solution is to only use full urls, but that may be impossible.
- *
- * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
- *
- * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
- *
- */
-
-module.exports = function (css) {
-  // get current location
-  var location = typeof window !== "undefined" && window.location;
-
-  if (!location) {
-    throw new Error("fixUrls requires window.location");
-  }
-
-	// blank or null?
-	if (!css || typeof css !== "string") {
-	  return css;
-  }
-
-  var baseUrl = location.protocol + "//" + location.host;
-  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
-
-	// convert each url(...)
-	/*
-	This regular expression is just a way to recursively match brackets within
-	a string.
-
-	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
-	   (  = Start a capturing group
-	     (?:  = Start a non-capturing group
-	         [^)(]  = Match anything that isn't a parentheses
-	         |  = OR
-	         \(  = Match a start parentheses
-	             (?:  = Start another non-capturing groups
-	                 [^)(]+  = Match anything that isn't a parentheses
-	                 |  = OR
-	                 \(  = Match a start parentheses
-	                     [^)(]*  = Match anything that isn't a parentheses
-	                 \)  = Match a end parentheses
-	             )  = End Group
-              *\) = Match anything and then a close parens
-          )  = Close non-capturing group
-          *  = Match anything
-       )  = Close capturing group
-	 \)  = Match a close parens
-
-	 /gi  = Get all matches, not the first.  Be case insensitive.
-	 */
-	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
-		// strip quotes (if they exist)
-		var unquotedOrigUrl = origUrl
-			.trim()
-			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
-			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
-
-		// already a full url? no change
-		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
-		  return fullMatch;
-		}
-
-		// convert the url to a full url
-		var newUrl;
-
-		if (unquotedOrigUrl.indexOf("//") === 0) {
-		  	//TODO: should we add protocol?
-			newUrl = unquotedOrigUrl;
-		} else if (unquotedOrigUrl.indexOf("/") === 0) {
-			// path should be relative to the base url
-			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
-		} else {
-			// path should be relative to current directory
-			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
-		}
-
-		// send back the fixed url(...)
-		return "url(" + JSON.stringify(newUrl) + ")";
-	});
-
-	// send back the fixed css
-	return fixedCss;
-};
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(5);
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.TextEditor = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(1);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _Window = __webpack_require__(2);
-
-var _textEditor = __webpack_require__(19);
-
-var _textEditor2 = _interopRequireDefault(_textEditor);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var TextEditor = exports.TextEditor = function (_React$Component) {
-    _inherits(TextEditor, _React$Component);
-
-    function TextEditor(props) {
-        _classCallCheck(this, TextEditor);
-
-        return _possibleConstructorReturn(this, (TextEditor.__proto__ || Object.getPrototypeOf(TextEditor)).call(this, props));
-    }
-
-    _createClass(TextEditor, [{
-        key: "render",
-        value: function render() {
-            return _react2.default.createElement(
-                _Window.Window,
-                { titleName: this.props.titleName, windowsManager: this.props.windowsManager },
-                _react2.default.createElement(
-                    "div",
-                    { className: "text-editor" },
-                    _react2.default.createElement(
-                        "div",
-                        { className: "toolbar" },
-                        _react2.default.createElement(
-                            "span",
-                            { className: "btn" },
-                            _react2.default.createElement("i", { className: "fa fa-file-text-o", "aria-hidden": "true" })
-                        ),
-                        _react2.default.createElement(
-                            "span",
-                            { className: "btn" },
-                            _react2.default.createElement("i", { className: "fa fa-floppy-o", "aria-hidden": "true" })
-                        )
-                    ),
-                    _react2.default.createElement("textarea", { className: "real-editor" })
-                )
-            );
-        }
-    }]);
-
-    return TextEditor;
-}(_react2.default.Component);
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".text-editor .toolbar {\n  height: 20px; }\n  .text-editor .toolbar .btn {\n    margin: 2px; }\n  .text-editor .toolbar .btn:hover {\n    background: lightblue; }\n\n.text-editor .real-editor {\n  height: 260px;\n  width: 396px; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(18);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(4)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./textEditor.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./textEditor.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
 
 /***/ })
 /******/ ]);

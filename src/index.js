@@ -1,11 +1,9 @@
 const {VirtualLine}  = require("./VirtualLine.js")
 import {WindowsManager} from "./Windows/WindowsManager.js"
-import {Window} from "./Windows/Window.jsx"
-import {TextEditor} from "./TextEditor/TextEditor.jsx"
-import {FileWindow} from "./Files/FileWindow.jsx"
-import {ProgramExecutor} from "./ProgramExecutor/ProgramExecutor.jsx"
-import React from "react"
-import ReactDOM from 'react-dom'
+import {Window} from "./Windows/Window"
+import {TextEditor} from "./TextEditor/TextEditor"
+import {FileWindow} from "./Files/FileWindow"
+import {ProgramExecutor} from "./ProgramExecutor/ProgramExecutor"
 
 const measure_font = "船";
 
@@ -73,17 +71,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     let wm = new WindowsManager();
 
-    ReactDOM.render(<div>
-        <TextEditor 
-            titleName="Untitled 2"
-            windowsManager={wm} />
-        <FileWindow 
-            titleName="File Manager"
-            windowsManager={wm} />
-        <ProgramExecutor 
-            titleName="ProgramExecutor"
-            windowsManager={wm} />
-    </div>,
-        document.getElementById('world'));
+    // ReactDOM.render(<div>
+    //     <TextEditor 
+    //         titleName="Untitled 2"
+    //         windowsManager={wm} />
+    //     <FileWindow 
+    //         titleName="File Manager"
+    //         windowsManager={wm} />
+    //     <ProgramExecutor 
+    //         titleName="ProgramExecutor"
+    //         windowsManager={wm} />
+    // </div>,
+    //     document.getElementById('world'));
 
 });

@@ -17,14 +17,13 @@
     "css-loader": "^0.28.4",
     "extract-text-webpack-plugin": "^2.1.2",
     "node-sass": "^4.5.3",
-    "react-winjs": "^2.5.0",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "webpack": "^3.5.3",
     "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "htmlparser": "^1.7.7",
+    "install": "^0.10.1"
   }
 }

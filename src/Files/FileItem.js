@@ -2,6 +2,13 @@ import React from "react"
 import ReactDOM from 'react-dom'
 import style from "../stylesheets/file.scss"
 
+const template = `
+<div className="file-item">
+    {this.GetIcon()}
+    <p className="filename">{this.props.filename}</p>
+</div>
+`;
+
 export class FileItem extends React.Component {
 
     constructor(props) {
@@ -17,10 +24,7 @@ export class FileItem extends React.Component {
     }
 
     render() {
-        return <div className="file-item">
-            {this.GetIcon()}
-            <p className="filename">{this.props.filename}</p>
-        </div>
+        return null;
     }
 
 }
