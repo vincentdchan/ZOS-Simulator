@@ -1092,7 +1092,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".unselectable {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none; }\n\n.undraggable {\n  user-drag: none;\n  user-select: none;\n  -moz-user-select: none;\n  -webkit-user-drag: none;\n  -webkit-user-select: none;\n  -ms-user-select: none; }\n\n* {\n  box-sizing: border-box; }\n\n.col-1 {\n  width: 8.33%; }\n\n.col-2 {\n  width: 16.66%; }\n\n.col-3 {\n  width: 25%; }\n\n.col-4 {\n  width: 33.33%; }\n\n.col-5 {\n  width: 41.66%; }\n\n.col-6 {\n  width: 50%; }\n\n.col-7 {\n  width: 58.33%; }\n\n.col-8 {\n  width: 66.66%; }\n\n.col-9 {\n  width: 75%; }\n\n.col-10 {\n  width: 83.33%; }\n\n.col-11 {\n  width: 91.66%; }\n\n.col-12 {\n  width: 100%; }\n\n[class*=\"col-\"] {\n  float: left; }\n\n.row::after {\n  content: \"\";\n  clear: both;\n  display: table; }\n\n.glowing-border {\n  outline: none;\n  border-color: #9ecaed;\n  box-shadow: 0 0 20px #49afff; }\n\n.window {\n  position: fixed;\n  background-color: white;\n  border-style: solid;\n  border-width: 2px;\n  border-color: white; }\n  .window .titleBar {\n    width: 100%;\n    background-color: lightblue;\n    height: 16px; }\n    .window .titleBar .name {\n      font-size: 14px;\n      color: black;\n      margin: 0px;\n      cursor: default; }\n    .window .titleBar p {\n      line-height: 16px; }\n  .window .right {\n    position: absolute;\n    right: 0px;\n    font-size: 14px;\n    line-height: 16px; }\n  .window .right:hover {\n    background-color: white;\n    color: lightblue; }\n", ""]);
+exports.push([module.i, ".unselectable {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none; }\n\n.undraggable {\n  user-drag: none;\n  user-select: none;\n  -moz-user-select: none;\n  -webkit-user-drag: none;\n  -webkit-user-select: none;\n  -ms-user-select: none; }\n\n.clicked {\n  transform: translateX(2px) translateY(2px); }\n\n* {\n  box-sizing: border-box; }\n\n.col-1 {\n  width: 8.33%; }\n\n.col-2 {\n  width: 16.66%; }\n\n.col-3 {\n  width: 25%; }\n\n.col-4 {\n  width: 33.33%; }\n\n.col-5 {\n  width: 41.66%; }\n\n.col-6 {\n  width: 50%; }\n\n.col-7 {\n  width: 58.33%; }\n\n.col-8 {\n  width: 66.66%; }\n\n.col-9 {\n  width: 75%; }\n\n.col-10 {\n  width: 83.33%; }\n\n.col-11 {\n  width: 91.66%; }\n\n.col-12 {\n  width: 100%; }\n\n[class*=\"col-\"] {\n  float: left; }\n\n.row::after {\n  content: \"\";\n  clear: both;\n  display: table; }\n\n.glowing-border {\n  outline: none;\n  border-color: #9ecaed;\n  box-shadow: 0 0 20px #49afff; }\n\n.window {\n  position: fixed;\n  background-color: white;\n  border-style: solid;\n  border-width: 2px;\n  border-color: white; }\n  .window .titleBar {\n    width: 100%;\n    background-color: lightblue;\n    height: 16px; }\n    .window .titleBar .name {\n      font-size: 14px;\n      color: black;\n      margin: 0px;\n      cursor: default; }\n    .window .titleBar p {\n      line-height: 16px; }\n  .window .right {\n    position: absolute;\n    right: 0px;\n    font-size: 14px;\n    line-height: 16px; }\n  .window .right:hover {\n    background-color: white;\n    color: lightblue; }\n", ""]);
 
 // exports
 
@@ -2337,6 +2337,16 @@ var template = "<div ref=\"frame\" class=\"program-executor\">\n    <div class=\
 
 var source_code = "\nADD     R1,  1,  1\nADD     R2, R1,  1\nLOAD    R3, R2,  0\nSTORE   R1, R3,  0\n";
 
+function initBtn(btn) {
+    var img = btn.querySelector('img');
+    btn.addEventListener('mousedown', function (e) {
+        img.classList.add('clicked');
+    });
+    btn.addEventListener('mouseup', function (e) {
+        img.classList.remove('clicked');
+    });
+}
+
 var ProgramExecutor = exports.ProgramExecutor = function (_Window) {
     _inherits(ProgramExecutor, _Window);
 
@@ -2364,6 +2374,11 @@ var ProgramExecutor = exports.ProgramExecutor = function (_Window) {
         _this.$refs.stepForwardBtn.addEventListener('click', function (e) {
             return _this.onStepForwardClicked(e);
         });
+
+        initBtn(_this.$refs.runBtn);
+        initBtn(_this.$refs.pauseBtn);
+        initBtn(_this.$refs.stopBtn);
+        initBtn(_this.$refs.stepForwardBtn);
 
         _this.title = "Program Executor";
         return _this;

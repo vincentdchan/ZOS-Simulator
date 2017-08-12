@@ -64,6 +64,16 @@ LOAD    R3, R2,  0
 STORE   R1, R3,  0
 `
 
+function initBtn(btn) {
+    let img = btn.querySelector('img');
+    btn.addEventListener('mousedown', (e) => {
+        img.classList.add('clicked');
+    })
+    btn.addEventListener('mouseup', (e) => {
+        img.classList.remove('clicked');
+    });
+}
+
 export class ProgramExecutor extends Window {
 
     constructor(wm) {
@@ -79,6 +89,11 @@ export class ProgramExecutor extends Window {
         this.$refs.pauseBtn.addEventListener('click', (e) => this.onPauseClicked(e));
         this.$refs.stopBtn.addEventListener('click', (e) => this.onStopClicked(e));
         this.$refs.stepForwardBtn.addEventListener('click', (e) => this.onStepForwardClicked(e));
+
+        initBtn(this.$refs.runBtn);
+        initBtn(this.$refs.pauseBtn);
+        initBtn(this.$refs.stopBtn);
+        initBtn(this.$refs.stepForwardBtn);
 
         this.title = "Program Executor";
     }

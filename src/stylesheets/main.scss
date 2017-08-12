@@ -16,6 +16,10 @@
     -ms-user-select: none;
 }
 
+.clicked {
+    transform: translateX(2px) translateY(2px); 
+}
+
 * {
     box-sizing: border-box;
 }
