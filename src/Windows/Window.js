@@ -235,7 +235,7 @@ export class Window extends Component {
     set zIndex(value) {
         if (this._zIndex !== value) {
             this._zIndex = value;
-            this._dom.style.zIndex = value + 'px';
+            this._dom.style.zIndex = value;
         }
     }
 

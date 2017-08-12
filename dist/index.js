@@ -358,7 +358,7 @@ var Window = exports.Window = function (_Component2) {
         set: function set(value) {
             if (this._zIndex !== value) {
                 this._zIndex = value;
-                this._dom.style.zIndex = value + 'px';
+                this._dom.style.zIndex = value;
             }
         }
     }]);
@@ -913,9 +913,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // </div>,
     //     document.getElementById('world'));
     var my_window = new _TextEditor.TextEditor(wm);
+    var pe = new _ProgramExecutor.ProgramExecutor(wm);
 
     var world = document.getElementById('world');
     world.appendChild(my_window.dom);
+    world.appendChild(pe.dom);
 });
 
 /***/ }),
@@ -2250,8 +2252,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ProgramExecutor = undefined;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _Window2 = __webpack_require__(0);
 
 var _programExecutor = __webpack_require__(19);
@@ -2266,23 +2266,19 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var template = "\n<Window titleName={this.props.titleName} windowsManager={this.props.windowsManager}>\n    <div className=\"program-executor\">\n        <div className=\"toolbar unselectable\">\n            <div className=\"item\">\n                <img src=\"assets/images/exe/run.png\" />\n            </div>\n            <div className=\"item\">\n                <img src=\"assets/images/exe/pause.png\" />\n            </div>\n            <div className=\"item\">\n                <img src=\"assets/images/exe/stop.png\" />\n            </div>\n            <div className=\"item\">\n                <img src=\"assets/images/exe/step-forward.png\" />\n            </div>\n        </div>\n        <table className=\"main-table\">\n            <tbody>\n                <tr>\n                    <td>\n                        <div class=\"line\">\n                            <div class=\"gutter\">1</div>\n                            <div>ADD 3</div>\n                        </div>\n                    </td>\n                    <td>\n                        <div>\n                            <div>a: 3</div>\n                            <div>a: 3</div>\n                            <div>a: 3</div>\n                        </div>\n                    </td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n</Window>\n";
+var template = "<div class=\"program-executor\">\n    <div class=\"toolbar unselectable\">\n        <div class=\"item\">\n            <img src=\"assets/images/exe/run.png\" />\n        </div>\n        <div class=\"item\">\n            <img src=\"assets/images/exe/pause.png\" />\n        </div>\n        <div class=\"item\">\n            <img src=\"assets/images/exe/stop.png\" />\n        </div>\n        <div class=\"item\">\n            <img src=\"assets/images/exe/step-forward.png\" />\n        </div>\n    </div>\n    <table class=\"main-table\">\n        <tbody>\n            <tr>\n                <td>\n                    <div class=\"line\">\n                        <div class=\"gutter\">1</div>\n                        <div>ADD 3</div>\n                    </div>\n                </td>\n                <td>\n                    <div>\n                        <div>a: 3</div>\n                        <div>a: 3</div>\n                        <div>a: 3</div>\n                    </div>\n                </td>\n            </tr>\n        </tbody>\n    </table>\n</div>";
 
 var ProgramExecutor = exports.ProgramExecutor = function (_Window) {
     _inherits(ProgramExecutor, _Window);
 
-    function ProgramExecutor(props) {
+    function ProgramExecutor(wm) {
         _classCallCheck(this, ProgramExecutor);
 
-        return _possibleConstructorReturn(this, (ProgramExecutor.__proto__ || Object.getPrototypeOf(ProgramExecutor)).call(this, props));
-    }
+        var _this = _possibleConstructorReturn(this, (ProgramExecutor.__proto__ || Object.getPrototypeOf(ProgramExecutor)).call(this, wm));
 
-    _createClass(ProgramExecutor, [{
-        key: "render",
-        value: function render() {
-            return null;
-        }
-    }]);
+        _this.Slot('default', _this.RenderTemplate(template));
+        return _this;
+    }
 
     return ProgramExecutor;
 }(_Window2.Window);
