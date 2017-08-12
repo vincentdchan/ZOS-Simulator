@@ -12,6 +12,8 @@ const OP_LOAD   = 5;
 const OP_STORE  = 6;
 const OP_CMP    = 7;
 const OP_JMP    = 8;
+const OP_NOTSTRICT_EQL = 36;
+const OP_SLICE  = 37;
 
 export class VM {
 
@@ -47,7 +49,7 @@ export class Context {
 
     constructor() {
         this._registers = [];
-        this._registers.length = 256;
+        this._registers.length = 16;
         this._flags = {
             gt: false,
             lt: false,
@@ -70,12 +72,12 @@ export class Context {
 export class Program {
 
     constructor() {
-        this._program = [];
         this._contants = [];
+        this._instructions = [];
     }
 
     AddInstruction(op_code, a1, a2, a3) {
-        this._program.push(newInst(op_code, a1, a2, a3));
+        this._instructions.push(newInst(op_code, a1, a2, a3));
     }
 
     AddConstant(constant) {
