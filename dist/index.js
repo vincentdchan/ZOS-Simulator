@@ -852,6 +852,8 @@ var _FileWindow = __webpack_require__(14);
 
 var _ProgramExecutor = __webpack_require__(18);
 
+var _TaskManager = __webpack_require__(22);
+
 /************************ 
  * Author: DZ Chan 
  * Date:   2017-08-12 
@@ -941,11 +943,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
     var my_window = new _TextEditor.TextEditor(wm);
     var pe = new _ProgramExecutor.ProgramExecutor(wm);
     var fw = new _FileWindow.FileWindow(wm);
+    var taskManager = new _TaskManager.TaskManager(wm);
 
     var world = document.getElementById('world');
-    world.appendChild(my_window.dom);
-    world.appendChild(pe.dom);
-    world.appendChild(fw.dom);
+    my_window.Render(world);
+    pe.Render(world);
+    fw.Render(world);
+    taskManager.Render(world);
 });
 
 /***/ }),
@@ -2575,6 +2579,142 @@ var VirtualLine = exports.VirtualLine = function () {
 
     return VirtualLine;
 }();
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.TaskManager = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _Window2 = __webpack_require__(0);
+
+var _taskManager = __webpack_require__(23);
+
+var _taskManager2 = _interopRequireDefault(_taskManager);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************ 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Author: DZ Chan 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Date:   2017-08-14 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ************************/
+
+var task_manager_template = "<div id=\"task-manager\" class=\"task-manager\">\n    <div class=\"tabs\">\n        <ul class=\"unselectable\">\n            <li v-bind:class=\"{ active: nav_number == 1}\" v-on:click=\"choose(1)\">Process</li>\n            <li v-bind:class=\"{ active: nav_number == 2}\" v-on:click=\"choose(2)\">CPU</li>\n            <li v-bind:class=\"{ active: nav_number == 3}\" v-on:click=\"choose(3)\">Memory</li>\n            <li v-bind:class=\"{ active: nav_number == 4}\" v-on:click=\"choose(4)\">Information</li>\n        </ul>\n    </div>\n    <div class=\"main-frame\">\n        <slot name=\"processPage\" />\n        <slot name=\"cpuPage\" />\n        <slot name=\"memoryPage\" />\n        <slot name=\"infoPage\" />\n    </div>\n</div>";
+
+var process_page_template = "<div v-show=\"nav_number == 1\" class=\"process-page page\">\n    <table>\n        <thead>\n            <tr>\n                <th>PID</th>\n                <th>Process Name</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr>\n                <td>#aaa</td>\n                <td>Name.asm</td>\n            </tr>\n        </tbody>\n    </table>\n</div>";
+
+var cpu_page_template = "<div v-show=\"nav_number == 2\" class=\"cpu-page page\">\n</div>";
+
+var memory_page_template = "<div v-show=\"nav_number == 3\" class=\"memory-page page\">\n</div>";
+
+var info_page_template = "<div v-show=\"nav_number == 4\" class=\"info-page page\">\n    <div class=\"content-body\">\n        <h1>ZOS</h1>\n        <table>\n            <tbody>\n                <tr>\n                    <td class=\"name\">ComputerName</td>\n                    <td>ZOS-Simualtor</td>\n                </tr>\n                <tr>\n                    <td class=\"name\">Company</td>\n                    <td>fsociety</td>\n                </tr>\n                <tr>\n                    <td class=\"name\">OS Version</td>\n                    <td>ZOS-1.0.0</td>\n                </tr>\n                <tr>\n                    <td class=\"name\">Processor</td>\n                    <td>ZVM 1.0.0</td>\n                </tr>\n                <tr>\n                    <td class=\"name\">Memory</td>\n                    <td>256k</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n</div>";
+
+var TaskManager = exports.TaskManager = function (_Window) {
+    _inherits(TaskManager, _Window);
+
+    function TaskManager(wm) {
+        _classCallCheck(this, TaskManager);
+
+        var _this = _possibleConstructorReturn(this, (TaskManager.__proto__ || Object.getPrototypeOf(TaskManager)).call(this, wm));
+
+        _this.Slot('default', _this.RenderTemplate(task_manager_template));
+
+        _this.Slot('processPage', _this.RenderTemplate(process_page_template));
+        _this.Slot('cpuPage', _this.RenderTemplate(cpu_page_template));
+        _this.Slot('memoryPage', _this.RenderTemplate(memory_page_template));
+        _this.Slot('infoPage', _this.RenderTemplate(info_page_template));
+
+        _this.width = 640;
+        _this.height = 480;
+
+        _this.title = "Task Manager";
+        return _this;
+    }
+
+    _createClass(TaskManager, [{
+        key: "Render",
+        value: function Render(dom) {
+            _get(TaskManager.prototype.__proto__ || Object.getPrototypeOf(TaskManager.prototype), "Render", this).call(this, dom);
+        }
+    }, {
+        key: "onMounted",
+        value: function onMounted() {
+            var app = new Vue({
+                el: '#task-manager',
+                data: {
+                    nav_number: 1,
+                    message: 'Hello world'
+                },
+                methods: {
+                    choose: function choose(number) {
+                        this.nav_number = number;
+                    }
+                }
+            });
+        }
+    }]);
+
+    return TaskManager;
+}(_Window2.Window);
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(24);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(2)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./taskManager.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./taskManager.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".tabs ul {\n  padding: 0px;\n  margin: 0px; }\n  .tabs ul li {\n    display: inline-block;\n    list-style: none;\n    margin: 0px;\n    padding-top: 8px;\n    padding-bottom: 8px;\n    padding-left: 14px;\n    padding-right: 14px; }\n  .tabs ul li.active {\n    background-color: #ADD8E6; }\n  .tabs ul li:hover {\n    background-color: #C6DAE0;\n    cursor: pointer; }\n\n.process-page table {\n  width: 100%;\n  border-collapse: collapse; }\n  .process-page table tbody tr:hover {\n    background-color: lightgrey; }\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);

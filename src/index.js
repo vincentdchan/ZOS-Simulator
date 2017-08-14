@@ -9,6 +9,7 @@ import {Window, Component} from "./Windows/Window"
 import {TextEditor} from "./TextEditor/TextEditor"
 import {FileWindow} from "./Files/FileWindow"
 import {ProgramExecutor} from "./ProgramExecutor/ProgramExecutor"
+import {TaskManager} from "./TaskManager/TaskManager"
 
 const measure_font = "船";
 
@@ -91,9 +92,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     let my_window = new TextEditor(wm);
     let pe = new ProgramExecutor(wm);
     let fw = new FileWindow(wm);
+    let taskManager = new TaskManager(wm);
 
     let world = document.getElementById('world');
-    world.appendChild(my_window.dom);
-    world.appendChild(pe.dom);
-    world.appendChild(fw.dom);
+    my_window.Render(world);
+    pe.Render(world);
+    fw.Render(world);
+    taskManager.Render(world);
 });
