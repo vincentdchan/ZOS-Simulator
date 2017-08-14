@@ -46,3 +46,20 @@
     }
 
 }
+
+.info-page {
+
+    .name {
+        font-weight: bold;
+    }
+
+    .content-body {
+        text-align: center;
+    }
+
+    table {
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+
+}

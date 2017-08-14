@@ -27,14 +27,16 @@ const process_page_template = `<div v-show="nav_number == 1" class="process-page
     <table>
         <thead>
             <tr>
-                <th>PID</th>
-                <th>Process Name</th>
+                <th align="left">PID</th>
+                <th align="left">Process Name</th>
+                <th align="left">Memory</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>#aaa</td>
                 <td>Name.asm</td>
+                <td>10k</td>
             </tr>
         </tbody>
     </table>
@@ -52,24 +54,24 @@ const info_page_template = `<div v-show="nav_number == 4" class="info-page page"
         <table>
             <tbody>
                 <tr>
-                    <td class="name">ComputerName</td>
-                    <td>ZOS-Simualtor</td>
+                    <td align="left" class="name">ComputerName</td>
+                    <td align="left">ZOS-Simualtor</td>
                 </tr>
                 <tr>
-                    <td class="name">Company</td>
-                    <td>fsociety</td>
+                    <td align="left" class="name">Company</td>
+                    <td align="left">fsociety</td>
                 </tr>
                 <tr>
-                    <td class="name">OS Version</td>
-                    <td>ZOS-1.0.0</td>
+                    <td align="left" class="name">OS Version</td>
+                    <td align="left">ZOS-1.0.0</td>
                 </tr>
                 <tr>
-                    <td class="name">Processor</td>
-                    <td>ZVM 1.0.0</td>
+                    <td align="left" class="name">Processor</td>
+                    <td align="left">ZVM 1.0.0</td>
                 </tr>
                 <tr>
-                    <td class="name">Memory</td>
-                    <td>256k</td>
+                    <td align="left" class="name">Memory</td>
+                    <td align="left">256k</td>
                 </tr>
             </tbody>
         </table>

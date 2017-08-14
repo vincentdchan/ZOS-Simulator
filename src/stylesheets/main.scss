@@ -57,13 +57,14 @@
     position: fixed;
     background-color: white;
     border-style: solid;
-    border-width: 2px;
-    border-color: white;
+    border-width: 1px;
+    border-color: #9ecaed;
 
     .titleBar {
         width: 100%;
         background-color: lightblue;
-        height: 16px;
+        height: 18px;
+        padding: 1px;
 
         .name {
             font-size: 14px;
