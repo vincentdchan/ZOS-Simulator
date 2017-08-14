@@ -2964,10 +2964,6 @@ var VM = exports.VM = function (_Emitter) {
     return VM;
 }(_Emitter2.Emitter);
 
-function newInst(op_code, a1, a2, a3) {
-    return [op_code, a1, a2, a3];
-}
-
 var Context = exports.Context = function () {
     function Context() {
         _classCallCheck(this, Context);
@@ -3037,24 +3033,33 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var program_id = 0;
+
+function newInst(op_code, a1, a2, a3) {
+    return [op_code, a1, a2, a3];
+}
+
 var Program = exports.Program = function () {
     function Program() {
         _classCallCheck(this, Program);
 
+        this._name = "program#" + program_id++;
         this._constants = [];
         this._instructions = [];
+        this._source_map = null;
     }
 
     _createClass(Program, [{
         key: "AddInstruction",
         value: function AddInstruction(op_code, a1, a2, a3) {
             this._instructions.push(newInst(op_code, a1, a2, a3));
+            return this._instructions.length - 1;
         }
     }, {
         key: "AddConstant",
         value: function AddConstant(constant) {
             this._constants.push(constant);
-            return this._constants.length;
+            return this._constants.length - 1;
         }
     }, {
         key: "constants",
@@ -3065,6 +3070,22 @@ var Program = exports.Program = function () {
         key: "instructions",
         get: function get() {
             return this._instructions;
+        }
+    }, {
+        key: "source_map",
+        get: function get() {
+            return this._source_map;
+        },
+        set: function set(value) {
+            this._source_map = value;
+        }
+    }, {
+        key: "name",
+        get: function get() {
+            return this._name;
+        },
+        set: function set(value) {
+            this._name = value;
         }
     }]);
 
@@ -3085,23 +3106,39 @@ exports.Compile = Compile;
 
 var _Program = __webpack_require__(26);
 
-var regex_line = /([a-zA-Z]+)\s+([RC]?\d+)\s*,\s*([RC]?\d+)\s*,\s*([RC]?\d+)\s*(;.*)?/; /************************ 
-                                                                                         * Author: DZ Chan 
-                                                                                         * Date:   2017-08-14 
-                                                                                         ************************/
+var regex_line = /([a-zA-Z]+)\s+([RC]?\d+)\s*,\s*([RC]?\d+|\s+)\s*,\s*([RC]?\d+|\s+)\s*(;.*)?/; /************************ 
+                                                                                                 * Author: DZ Chan 
+                                                                                                 * Date:   2017-08-14 
+                                                                                                 ************************/
 
+var regex_define = /(define|DEFINE)\s+(\w+)\s+"((\\"|\w)+)"/;
 var regex_comment = /\s*(;.*)?/;
 
 function Compile(source_code) {
     var lines = source_code.split("\n");
+    var program = new _Program.Program();
+
+    var source_map = void 0;
 
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
         var result = void 0;
-        if ((result = regex_line.exec(line)) !== null) {} else if ((result = regex_comment.exec(line)) !== null) {} else {
+        if ((result = regex_line.exec(line)) !== null) {
+            var inst_id = program.AddInstruction(result[1], result[2], result[3], result[4]);
+            source_map[inst_id] = i;
+        } else if ((result = regex_define.exec(line)) != null) {
+            var define_name = result[2],
+                define_value = result[3];
+        } else if ((result = regex_comment.exec(line)) !== null) {
+            // comment line, ignore it
+        } else {
             throw new Error("Compile error: " + line);
         }
     }
+
+    program.source_map = source_map;
+
+    return program;
 }
 
 /***/ })

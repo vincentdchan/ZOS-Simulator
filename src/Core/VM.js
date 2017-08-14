@@ -209,10 +209,6 @@ export class VM extends Emitter {
 
 }
 
-function newInst(op_code, a1, a2, a3) {
-    return [op_code, a1, a2, a3];
-}
-
 export class Context {
 
     constructor() {
