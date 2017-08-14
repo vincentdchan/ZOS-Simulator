@@ -1,3 +1,8 @@
+/************************ 
+ * Author: DZ Chan 
+ * Date:   2017-08-14 
+ ************************/ 
+
 import {Window} from "../Windows/Window"
 
 const task_manager_template = `<div class="task-manager">
