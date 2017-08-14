@@ -3079,16 +3079,30 @@ var Program = exports.Program = function () {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.Compile = Compile;
 
 var _Program = __webpack_require__(26);
 
-function Compile(source_code) {} /************************ 
-                                  * Author: DZ Chan 
-                                  * Date:   2017-08-14 
-                                  ************************/
+var regex_line = /([a-zA-Z]+)\s+([RC]?\d+)\s*,\s*([RC]?\d+)\s*,\s*([RC]?\d+)\s*(;.*)?/; /************************ 
+                                                                                         * Author: DZ Chan 
+                                                                                         * Date:   2017-08-14 
+                                                                                         ************************/
+
+var regex_comment = /\s*(;.*)?/;
+
+function Compile(source_code) {
+    var lines = source_code.split("\n");
+
+    for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+        var result = void 0;
+        if ((result = regex_line.exec(line)) !== null) {} else if ((result = regex_comment.exec(line)) !== null) {} else {
+            throw new Error("Compile error: " + line);
+        }
+    }
+}
 
 /***/ })
 /******/ ]);
