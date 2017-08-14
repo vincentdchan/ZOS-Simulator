@@ -2717,17 +2717,26 @@ exports.push([module.i, ".tabs ul {\n  padding: 0px;\n  margin: 0px; }\n  .tabs 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.Context = exports.VM = undefined;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _Emitter2 = __webpack_require__(6);
+
+var _Program = __webpack_require__(26);
+
+var _Compiler = __webpack_require__(27);
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-/************************ 
- * Author: DZ Chan 
- * Date:   2017-08-12 
- ************************/
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************ 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Author: DZ Chan 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Date:   2017-08-12 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ************************/
 
 var OP_STOP = 0;
 var OP_ADD = 1;
@@ -2738,24 +2747,34 @@ var OP_LOAD = 5;
 var OP_STORE = 6;
 var OP_CMP = 7;
 var OP_JMP = 8;
+var OP_JMP_GT = 9;
+var OP_JMP_LT = 10;
+var OP_JMP_GTEQ = 11;
+var OP_JMP_LTEQ = 12;
+var OP_JMP_EQ = 13;
 var OP_NOTSTRICT_EQL = 36;
 var OP_SLICE = 37;
 var OP_TOINT = 64;
 var OP_TOSTR = 65;
 
-var VM = exports.VM = function () {
+var VM = exports.VM = function (_Emitter) {
+    _inherits(VM, _Emitter);
+
     function VM() {
         _classCallCheck(this, VM);
 
-        this._context_queue = [];
-        this._current_context = null;
+        var _this = _possibleConstructorReturn(this, (VM.__proto__ || Object.getPrototypeOf(VM)).call(this));
+
+        _this._context_queue = [];
+        _this._current_context = null;
+        return _this;
     }
 
     // Run the program directly
 
 
     _createClass(VM, [{
-        key: 'Run',
+        key: "Run",
         value: function Run(program) {
             var new_pid = this._context_queue.length;
             var ctx = new Context();
@@ -2768,29 +2787,38 @@ var VM = exports.VM = function () {
         // every step of the program
 
     }, {
-        key: 'RunDebug',
+        key: "RunDebug",
         value: function RunDebug(program, callback) {}
 
         // This method compile 
         // asm file into opcode
 
     }, {
-        key: 'CompileASM',
+        key: "CompileASM",
         value: function CompileASM(source_code) {}
 
         // Compile and run the program
 
     }, {
-        key: 'Eval',
+        key: "Eval",
         value: function Eval(source_code) {}
     }, {
-        key: 'ExtractRegisterNumber',
+        key: "ExtractRegisterNumber",
         value: function ExtractRegisterNumber(content) {
             if (content[0] != 'R' && content[0] != 'r') throw new Error("OP must be a register");
             return parseInt(content[1]);
         }
+
+        // Swith program to run
+        // or step program
+
     }, {
-        key: 'Step',
+        key: "Tick",
+        value: function Tick() {
+            this.emit("tick");
+        }
+    }, {
+        key: "Step",
         value: function Step() {
             var ctx = this._current_context;
             var current_pc = ctx.pc;
@@ -2814,13 +2842,16 @@ var VM = exports.VM = function () {
                         throw new Error("Not a register");
                     }
                 } else {
-                    throw new Error("Not a legal type: " + (typeof op === 'undefined' ? 'undefined' : _typeof(op)));
+                    throw new Error("Not a legal type: " + (typeof op === "undefined" ? "undefined" : _typeof(op)));
                 }
             }
             var targetReisterNumber = void 0,
                 val1 = void 0,
                 val2 = void 0,
                 newValue = void 0;
+
+            this.emit('before-step', current_pc, inst);
+
             switch (inst[0]) {
                 case OP_STOP:
                     this.Kill(ctx.pid);
@@ -2831,7 +2862,7 @@ var VM = exports.VM = function () {
                     val2 = GetValue(op3);
                     newValue = val1 + val2;
                     ctx.registers[targetReisterNumber] = newValue;
-                    ctx.flags.type = typeof newValue === 'undefined' ? 'undefined' : _typeof(newValue);
+                    ctx.flags.type = typeof newValue === "undefined" ? "undefined" : _typeof(newValue);
                     ctx.flags.zero = newValue === 0;
                     ctx.flags.sign = newValue < 0;
                     break;
@@ -2841,7 +2872,7 @@ var VM = exports.VM = function () {
                     val2 = GetValue(op3);
                     newValue = val1 - val2;
                     ctx.registers[targetReisterNumber] = newValue;
-                    ctx.flags.type = typeof newValue === 'undefined' ? 'undefined' : _typeof(newValue);
+                    ctx.flags.type = typeof newValue === "undefined" ? "undefined" : _typeof(newValue);
                     ctx.flags.zero = newValue === 0;
                     ctx.flags.sign = newValue < 0;
                     break;
@@ -2851,7 +2882,7 @@ var VM = exports.VM = function () {
                     val2 = GetValue(op3);
                     newValue = val1 * val2;
                     ctx.registers[targetReisterNumber] = newValue;
-                    ctx.flags.type = typeof newValue === 'undefined' ? 'undefined' : _typeof(newValue);
+                    ctx.flags.type = typeof newValue === "undefined" ? "undefined" : _typeof(newValue);
                     ctx.flags.zero = newValue === 0;
                     ctx.flags.sign = newValue < 0;
                     break;
@@ -2861,7 +2892,7 @@ var VM = exports.VM = function () {
                     val2 = GetValue(op3);
                     newValue = val1 / val2;
                     ctx.registers[targetReisterNumber] = newValue;
-                    ctx.flags.type = typeof newValue === 'undefined' ? 'undefined' : _typeof(newValue);
+                    ctx.flags.type = typeof newValue === "undefined" ? "undefined" : _typeof(newValue);
                     ctx.flags.zero = newValue === 0;
                     ctx.flags.sign = newValue < 0;
                     break;
@@ -2909,26 +2940,29 @@ var VM = exports.VM = function () {
                     ctx.flags.sign = "string";
                     break;
             }
+
+            this.emit('after-step');
         }
     }, {
-        key: 'Kill',
+        key: "Kill",
         value: function Kill(pid) {
+            this.emit('kill', pid);
             throw new Error("Not implemented");
         }
     }, {
-        key: 'pc',
+        key: "pc",
         get: function get() {
             return this._current_context.pc;
         }
     }, {
-        key: 'flags',
+        key: "flags",
         get: function get() {
             return this._current_context.flags;
         }
     }]);
 
     return VM;
-}();
+}(_Emitter2.Emitter);
 
 function newInst(op_code, a1, a2, a3) {
     return [op_code, a1, a2, a3];
@@ -2950,12 +2984,12 @@ var Context = exports.Context = function () {
     }
 
     _createClass(Context, [{
-        key: 'registers',
+        key: "registers",
         get: function get() {
             return this._registers;
         }
     }, {
-        key: 'program',
+        key: "program",
         get: function get() {
             return this._program;
         },
@@ -2963,7 +2997,7 @@ var Context = exports.Context = function () {
             this._program = value;
         }
     }, {
-        key: 'pc',
+        key: "pc",
         set: function set(value) {
             this._pc = value;
         },
@@ -2971,7 +3005,7 @@ var Context = exports.Context = function () {
             return this._pc;
         }
     }, {
-        key: 'pid',
+        key: "pid",
         set: function set(value) {
             this._pid = value;
         },
@@ -2979,7 +3013,7 @@ var Context = exports.Context = function () {
             return this._pid;
         }
     }, {
-        key: 'flags',
+        key: "flags",
         get: function get() {
             return this._flags;
         }
@@ -2987,6 +3021,21 @@ var Context = exports.Context = function () {
 
     return Context;
 }();
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Program = exports.Program = function () {
     function Program() {
@@ -2997,23 +3046,23 @@ var Program = exports.Program = function () {
     }
 
     _createClass(Program, [{
-        key: 'AddInstruction',
+        key: "AddInstruction",
         value: function AddInstruction(op_code, a1, a2, a3) {
             this._instructions.push(newInst(op_code, a1, a2, a3));
         }
     }, {
-        key: 'AddConstant',
+        key: "AddConstant",
         value: function AddConstant(constant) {
             this._constants.push(constant);
             return this._constants.length;
         }
     }, {
-        key: 'constants',
+        key: "constants",
         get: function get() {
             return this._constants;
         }
     }, {
-        key: 'instructions',
+        key: "instructions",
         get: function get() {
             return this._instructions;
         }
@@ -3021,6 +3070,25 @@ var Program = exports.Program = function () {
 
     return Program;
 }();
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Compile = Compile;
+
+var _Program = __webpack_require__(26);
+
+function Compile(source_code) {} /************************ 
+                                  * Author: DZ Chan 
+                                  * Date:   2017-08-14 
+                                  ************************/
 
 /***/ })
 /******/ ]);

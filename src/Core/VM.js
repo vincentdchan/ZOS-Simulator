@@ -3,6 +3,10 @@
  * Date:   2017-08-12 
  ************************/
 
+import {Emitter} from "../Emitter"
+import {Program} from "./Program"
+import {Compile} from "./Compiler"
+
 const OP_STOP   = 0;
 const OP_ADD    = 1;
 const OP_SUB    = 2;
@@ -12,14 +16,20 @@ const OP_LOAD   = 5;
 const OP_STORE  = 6;
 const OP_CMP    = 7;
 const OP_JMP    = 8;
+const OP_JMP_GT = 9;
+const OP_JMP_LT = 10;
+const OP_JMP_GTEQ = 11;
+const OP_JMP_LTEQ = 12;
+const OP_JMP_EQ = 13;
 const OP_NOTSTRICT_EQL = 36;
 const OP_SLICE  = 37;
 const OP_TOINT  = 64;
 const OP_TOSTR  = 65;
 
-export class VM {
+export class VM extends Emitter {
 
     constructor() {
+        super();
         this._context_queue = [];
         this._current_context = null;
     }
@@ -56,6 +66,12 @@ export class VM {
         return parseInt(content[1]);
     }
 
+    // Swith program to run
+    // or step program
+    Tick() {
+        this.emit("tick");
+    }
+
     Step() {
         let ctx = this._current_context;
         let current_pc = ctx.pc;
@@ -83,6 +99,9 @@ export class VM {
             }
         }
         let targetReisterNumber, val1, val2, newValue;
+
+        this.emit('before-step', current_pc, inst);
+
         switch(inst[0]) {
         case OP_STOP:
             this.Kill(ctx.pid);
@@ -171,9 +190,12 @@ export class VM {
             ctx.flags.sign = "string";
             break;
         }
+
+        this.emit('after-step');
     }
 
     Kill(pid) {
+        this.emit('kill', pid);
         throw new Error("Not implemented");
     }
 
@@ -235,32 +257,6 @@ export class Context {
 
     get flags() {
         return this._flags;
-    }
-
-}
-
-export class Program {
-
-    constructor() {
-        this._constants = [];
-        this._instructions = [];
-    }
-
-    AddInstruction(op_code, a1, a2, a3) {
-        this._instructions.push(newInst(op_code, a1, a2, a3));
-    }
-
-    AddConstant(constant) {
-        this._constants.push(constant);
-        return this._constants.length;
-    }
-
-    get constants() {
-        return this._constants;
-    }
-
-    get instructions() {
-        return this._instructions;
     }
 
 }
