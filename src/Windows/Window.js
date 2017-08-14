@@ -21,6 +21,15 @@ export class Component {
         this.$refs = {};
     }
 
+    onMounted() {
+
+    }
+
+    Render(dom) {
+        dom.appendChild(this._dom);
+        this.onMounted();
+    }
+
     RenderTemplate(template) {
         let handle = new htmlparser.DefaultHandler((error, dom) => {
             if (error) {
@@ -81,7 +90,15 @@ export class Component {
     }
 
     Slot(name, value) {
-        this._slot[name].appendChild(value);
+        let slot_dom = this._slot[name];
+        let parent = slot_dom.parentNode;
+        parent.replaceChild(value, slot_dom);
+        this._slot[name] = value;
+    }
+
+    // unbind the callback from higher dom
+    Dispose() {
+
     }
 
 }

@@ -117,6 +117,15 @@ var Component = exports.Component = function () {
     }
 
     _createClass(Component, [{
+        key: "onMounted",
+        value: function onMounted() {}
+    }, {
+        key: "Render",
+        value: function Render(dom) {
+            dom.appendChild(this._dom);
+            this.onMounted();
+        }
+    }, {
         key: "RenderTemplate",
         value: function RenderTemplate(template) {
             var handle = new htmlparser.DefaultHandler(function (error, dom) {
@@ -182,8 +191,17 @@ var Component = exports.Component = function () {
     }, {
         key: "Slot",
         value: function Slot(name, value) {
-            this._slot[name].appendChild(value);
+            var slot_dom = this._slot[name];
+            var parent = slot_dom.parentNode;
+            parent.replaceChild(value, slot_dom);
+            this._slot[name] = value;
         }
+
+        // unbind the callback from higher dom
+
+    }, {
+        key: "Dispose",
+        value: function Dispose() {}
     }]);
 
     return Component;
