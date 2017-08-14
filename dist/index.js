@@ -854,6 +854,8 @@ var _ProgramExecutor = __webpack_require__(18);
 
 var _TaskManager = __webpack_require__(22);
 
+var _VM = __webpack_require__(25);
+
 /************************ 
  * Author: DZ Chan 
  * Date:   2017-08-12 
@@ -927,19 +929,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     tick();
 
     var wm = new _WindowsManager.WindowsManager();
+    var vm = new _VM.VM();
 
-    // ReactDOM.render(<div>
-    //     <TextEditor 
-    //         titleName="Untitled 2"
-    //         windowsManager={wm} />
-    //     <FileWindow 
-    //         titleName="File Manager"
-    //         windowsManager={wm} />
-    //     <ProgramExecutor 
-    //         titleName="ProgramExecutor"
-    //         windowsManager={wm} />
-    // </div>,
-    //     document.getElementById('world'));
     var my_window = new _TextEditor.TextEditor(wm);
     var pe = new _ProgramExecutor.ProgramExecutor(wm);
     var fw = new _FileWindow.FileWindow(wm);
@@ -2715,6 +2706,321 @@ exports.push([module.i, ".tabs ul {\n  padding: 0px;\n  margin: 0px; }\n  .tabs 
 
 // exports
 
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/************************ 
+ * Author: DZ Chan 
+ * Date:   2017-08-12 
+ ************************/
+
+var OP_STOP = 0;
+var OP_ADD = 1;
+var OP_SUB = 2;
+var OP_MUL = 3;
+var OP_DIV = 4;
+var OP_LOAD = 5;
+var OP_STORE = 6;
+var OP_CMP = 7;
+var OP_JMP = 8;
+var OP_NOTSTRICT_EQL = 36;
+var OP_SLICE = 37;
+var OP_TOINT = 64;
+var OP_TOSTR = 65;
+
+var VM = exports.VM = function () {
+    function VM() {
+        _classCallCheck(this, VM);
+
+        this._context_queue = [];
+        this._current_context = null;
+    }
+
+    // Run the program directly
+
+
+    _createClass(VM, [{
+        key: 'Run',
+        value: function Run(program) {
+            var new_pid = this._context_queue.length;
+            var ctx = new Context();
+            ctx.pid = new_pid;
+            ctx.program = program;
+            this._context_queue.push(ctx);
+        }
+
+        // Run the program and listen to the
+        // every step of the program
+
+    }, {
+        key: 'RunDebug',
+        value: function RunDebug(program, callback) {}
+
+        // This method compile 
+        // asm file into opcode
+
+    }, {
+        key: 'CompileASM',
+        value: function CompileASM(source_code) {}
+
+        // Compile and run the program
+
+    }, {
+        key: 'Eval',
+        value: function Eval(source_code) {}
+    }, {
+        key: 'ExtractRegisterNumber',
+        value: function ExtractRegisterNumber(content) {
+            if (content[0] != 'R' && content[0] != 'r') throw new Error("OP must be a register");
+            return parseInt(content[1]);
+        }
+    }, {
+        key: 'Step',
+        value: function Step() {
+            var ctx = this._current_context;
+            var current_pc = ctx.pc;
+            ctx.pc++;
+
+            var inst = ctx.program.instructions[current_pc];
+            var op_code = inst[0],
+                op1 = inst[1],
+                op2 = inst[2],
+                op3 = inst[3];
+
+            function GetValue(op) {
+                if (typeof op == "number") {
+                    return op;
+                } else if (typeof op == "string") {
+                    if (op[0] == 'R' || op[0] == 'r') {
+                        return ctx.registers[parseInt(op[1])];
+                    } else if (op[0] == 'C' || op[0] == 'c') {
+                        return ctx.program.constants[parseInt(op[1])];
+                    } else {
+                        throw new Error("Not a register");
+                    }
+                } else {
+                    throw new Error("Not a legal type: " + (typeof op === 'undefined' ? 'undefined' : _typeof(op)));
+                }
+            }
+            var targetReisterNumber = void 0,
+                val1 = void 0,
+                val2 = void 0,
+                newValue = void 0;
+            switch (inst[0]) {
+                case OP_STOP:
+                    this.Kill(ctx.pid);
+                    break;
+                case OP_ADD:
+                    targetReisterNumber = this.ExtractRegisterNumber(op1);
+                    val1 = GetValue(op2);
+                    val2 = GetValue(op3);
+                    newValue = val1 + val2;
+                    ctx.registers[targetReisterNumber] = newValue;
+                    ctx.flags.type = typeof newValue === 'undefined' ? 'undefined' : _typeof(newValue);
+                    ctx.flags.zero = newValue === 0;
+                    ctx.flags.sign = newValue < 0;
+                    break;
+                case OP_SUB:
+                    targetReisterNumber = this.ExtractRegisterNumber(op1);
+                    val1 = GetValue(op2);
+                    val2 = GetValue(op3);
+                    newValue = val1 - val2;
+                    ctx.registers[targetReisterNumber] = newValue;
+                    ctx.flags.type = typeof newValue === 'undefined' ? 'undefined' : _typeof(newValue);
+                    ctx.flags.zero = newValue === 0;
+                    ctx.flags.sign = newValue < 0;
+                    break;
+                case OP_MUL:
+                    targetReisterNumber = this.ExtractRegisterNumber(op1);
+                    val1 = GetValue(op2);
+                    val2 = GetValue(op3);
+                    newValue = val1 * val2;
+                    ctx.registers[targetReisterNumber] = newValue;
+                    ctx.flags.type = typeof newValue === 'undefined' ? 'undefined' : _typeof(newValue);
+                    ctx.flags.zero = newValue === 0;
+                    ctx.flags.sign = newValue < 0;
+                    break;
+                case OP_DIV:
+                    targetReisterNumber = this.ExtractRegisterNumber(op1);
+                    val1 = GetValue(op2);
+                    val2 = GetValue(op3);
+                    newValue = val1 / val2;
+                    ctx.registers[targetReisterNumber] = newValue;
+                    ctx.flags.type = typeof newValue === 'undefined' ? 'undefined' : _typeof(newValue);
+                    ctx.flags.zero = newValue === 0;
+                    ctx.flags.sign = newValue < 0;
+                    break;
+                case OP_LOAD:
+                    break;
+                case OP_STORE:
+                    break;
+                case OP_CMP:
+                    val1 = GetValue(op1);
+                    val2 = GetValue(op2);
+                    if (typeof val1 != "number" && typeof val2 != "number") {
+                        throw new Error("You can not compare somthing that is not number.");
+                    }
+                    ctx.flags.zero = val === val2;
+                    ctx.flags.sign = val1 < val2;
+                    break;
+                case OP_JMP:
+                    val1 = GetValue(op1);
+                    if (typeof val1 != "number") {
+                        throw new Error("You can not jump to an offset that is not number.");
+                    }
+                    ctx.pc = val1;
+                    break;
+                case OP_NOTSTRICT_EQL:
+                    val1 = GetValue(op1);
+                    val2 = GetValue(op2);
+                    ctx.flags.zero = val1 == val2;
+                    break;
+                case OP_SLICE:
+                    targetReisterNumber = this.ExtractRegisterNumber(op1);
+                    val1 = GetValue(op2);
+                    val2 = GetValue(op3);
+                    ctx.registers[targetReisterNumber] = ctx.registers[targetReisterNumber].slice(val1, val2);
+                    break;
+                case OP_TOINT:
+                    targetReisterNumber = this.ExtractRegisterNumber(op1);
+                    val1 = GetValue(op2);
+                    ctx.registers[targetReisterNumber] = parseInt(val1);
+                    ctx.flags.sign = "number";
+                    break;
+                case OP_TOSTR:
+                    targetReisterNumber = this.ExtractRegisterNumber(op1);
+                    val1 = GetValue(op2);
+                    ctx.registers[targetReisterNumber] = val1.toString();
+                    ctx.flags.sign = "string";
+                    break;
+            }
+        }
+    }, {
+        key: 'Kill',
+        value: function Kill(pid) {
+            throw new Error("Not implemented");
+        }
+    }, {
+        key: 'pc',
+        get: function get() {
+            return this._current_context.pc;
+        }
+    }, {
+        key: 'flags',
+        get: function get() {
+            return this._current_context.flags;
+        }
+    }]);
+
+    return VM;
+}();
+
+function newInst(op_code, a1, a2, a3) {
+    return [op_code, a1, a2, a3];
+}
+
+var Context = exports.Context = function () {
+    function Context() {
+        _classCallCheck(this, Context);
+
+        this._registers = [];
+        this._registers.length = 16;
+        this._flags = {
+            zero: false, // equal
+            sign: false, // less than
+            type: "undefined"
+        };
+        this._pc = 0;
+        this._pid = -1;
+    }
+
+    _createClass(Context, [{
+        key: 'registers',
+        get: function get() {
+            return this._registers;
+        }
+    }, {
+        key: 'program',
+        get: function get() {
+            return this._program;
+        },
+        set: function set(value) {
+            this._program = value;
+        }
+    }, {
+        key: 'pc',
+        set: function set(value) {
+            this._pc = value;
+        },
+        get: function get() {
+            return this._pc;
+        }
+    }, {
+        key: 'pid',
+        set: function set(value) {
+            this._pid = value;
+        },
+        get: function get() {
+            return this._pid;
+        }
+    }, {
+        key: 'flags',
+        get: function get() {
+            return this._flags;
+        }
+    }]);
+
+    return Context;
+}();
+
+var Program = exports.Program = function () {
+    function Program() {
+        _classCallCheck(this, Program);
+
+        this._constants = [];
+        this._instructions = [];
+    }
+
+    _createClass(Program, [{
+        key: 'AddInstruction',
+        value: function AddInstruction(op_code, a1, a2, a3) {
+            this._instructions.push(newInst(op_code, a1, a2, a3));
+        }
+    }, {
+        key: 'AddConstant',
+        value: function AddConstant(constant) {
+            this._constants.push(constant);
+            return this._constants.length;
+        }
+    }, {
+        key: 'constants',
+        get: function get() {
+            return this._constants;
+        }
+    }, {
+        key: 'instructions',
+        get: function get() {
+            return this._instructions;
+        }
+    }]);
+
+    return Program;
+}();
 
 /***/ })
 /******/ ]);

@@ -10,6 +10,7 @@ import {TextEditor} from "./TextEditor/TextEditor"
 import {FileWindow} from "./Files/FileWindow"
 import {ProgramExecutor} from "./ProgramExecutor/ProgramExecutor"
 import {TaskManager} from "./TaskManager/TaskManager"
+import {VM} from "./Core/VM"
 
 const measure_font = "船";
 
@@ -76,19 +77,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     tick();
 
     let wm = new WindowsManager();
+    let vm = new VM();
 
-    // ReactDOM.render(<div>
-    //     <TextEditor 
-    //         titleName="Untitled 2"
-    //         windowsManager={wm} />
-    //     <FileWindow 
-    //         titleName="File Manager"
-    //         windowsManager={wm} />
-    //     <ProgramExecutor 
-    //         titleName="ProgramExecutor"
-    //         windowsManager={wm} />
-    // </div>,
-    //     document.getElementById('world'));
     let my_window = new TextEditor(wm);
     let pe = new ProgramExecutor(wm);
     let fw = new FileWindow(wm);
