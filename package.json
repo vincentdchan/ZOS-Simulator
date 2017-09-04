@@ -1,7 +1,7 @@
 {
-  "name": "DesktopSimulator",
+  "name": "desktop-simulator",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "main.js",
   "license": "MIT",
   "private": true,
   "scripts": {
