@@ -5,7 +5,8 @@
 
 import style from "../stylesheets/main.scss"
 
-const window_template = `<div class="window" ref="frame" :style="{ left: x + 'px', top: y + 'px', zIndex: zIndex }"
+const window_template = `<div class="window" ref="frame" 
+    :style="{ left: x + 'px', top: y + 'px', width: width + 'px', height: height + 'px', zIndex: zIndex }"
     v-on:mousedown="onMouseDown($event)"
     :class="{ 'glowing-border': focused }">
     <div class="titleBar unselectable" ref="titlebar" 

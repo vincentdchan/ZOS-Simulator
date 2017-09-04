@@ -12,6 +12,7 @@ const template = `<window v-bind:wm="wm" v-bind:title-content="titleContent">
         <div class="itemContainer unselectable" ref="fileContainer">
 
             <file-item v-for="item in items" 
+                key="item.filename"
                 v-bind:file-type="item.fileType" 
                 v-bind:filename="item.filename" />
 
