@@ -23,6 +23,7 @@
     "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
-    "install": "^0.10.1"
+    "install": "^0.10.1",
+    "zfs-js": "^1.0.0"
   }
 }
