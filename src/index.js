@@ -6,8 +6,7 @@
 const {VirtualLine}  = require("./VirtualLine.js")
 import {WindowsManager} from "./Windows/WindowsManager.js"
 import {TextEditorComponent} from "./TextEditor/TextEditor"
-// import {FileWindow} from "./Files/FileWindow"
-// import {ProgramExecutor} from "./ProgramExecutor/ProgramExecutor"
+import {FileExplorerComponent} from "./Files/FileExplorer"
 
 const measure_font = "船";
 
@@ -81,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         components: {
             'text-editor': TextEditorComponent,
+            'file-explorer': FileExplorerComponent,
         },
 
         data: {

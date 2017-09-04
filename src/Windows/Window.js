@@ -6,7 +6,8 @@
 import style from "../stylesheets/main.scss"
 
 const window_template = `<div class="window" ref="frame" :style="{ left: x + 'px', top: y + 'px', zIndex: zIndex }"
-    v-on:mousedown="onMouseDown($event)">
+    v-on:mousedown="onMouseDown($event)"
+    :class="{ 'glowing-border': focused }">
     <div class="titleBar unselectable" ref="titlebar" 
         v-on:mouseup="onTitleBarMouseUp($event)"
         v-on:mousedown="onTitleBarMouseDown($event)">
@@ -31,7 +32,7 @@ export const WindowComponent =  {
 
         this.wm.addEventListener("focusedWindowChanged", (id) => {
             if (id === this.windowsID) {
-                this.$refs.frame.focus();
+                this.focus();
             } else {
                 this.unfocus();
             }
@@ -56,16 +57,14 @@ export const WindowComponent =  {
     methods: {
 
         focus: function() {
-            if (!this._focused) {
-                this._focused = true;
+            if (!this.focused) {
+                this.focused = true;
                 this.zIndex = this.wm.zIndexCounter(); 
-                this._dom.classList.add('glowing-border');
             }
         },
 
         unfocus: function() {
-            this._focused = false;
-            this._dom.classList.remove('glowing-border');
+            this.focused = false;
         },
 
         onMouseDown: function(event) {

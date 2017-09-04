@@ -33,9 +33,6 @@
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 /******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -63,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -195,7 +192,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(12);
+var	fixUrls = __webpack_require__(10);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -514,20 +511,128 @@ function updateLink (link, options, obj) {
 "use strict";
 
 
-var _WindowsManager = __webpack_require__(7);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.WindowComponent = undefined;
 
-var _TextEditor = __webpack_require__(4);
+var _main = __webpack_require__(8);
+
+var _main2 = _interopRequireDefault(_main);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var window_template = '<div class="window" ref="frame" :style="{ left: x + \'px\', top: y + \'px\', zIndex: zIndex }"\n    v-on:mousedown="onMouseDown($event)"\n    :class="{ \'glowing-border\': focused }">\n    <div class="titleBar unselectable" ref="titlebar" \n        v-on:mouseup="onTitleBarMouseUp($event)"\n        v-on:mousedown="onTitleBarMouseDown($event)">\n\n        <div class="right">\n            <i class="fa fa-window-close" aria-hidden="true"></i>\n        </div>\n        <p class="name" >{{ titleContent }}</p>\n    </div>\n    <div>\n        <slot />\n    </div>\n</div>'; /************************ 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   * Author: DZ Chan 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   * Date:   2017-08-12 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ************************/
+
+var WindowComponent = exports.WindowComponent = {
+    props: ['wm', 'titleContent'],
+    template: window_template,
+
+    mounted: function mounted() {
+        var _this = this;
+
+        this.zIndex = this.wm.zIndexCounter();
+        this.windowsID = this.wm.GetNewId();
+
+        this.wm.addEventListener("focusedWindowChanged", function (id) {
+            if (id === _this.windowsID) {
+                _this.focus();
+            } else {
+                _this.unfocus();
+            }
+        });
+        window.addEventListener("mousemove", function (event) {
+            return _this.onMouseMove(event);
+        });
+    },
+
+    data: function data() {
+        return {
+            x: 16,
+            y: 16,
+            width: 400,
+            height: 300,
+            title: "Window",
+            titleBarPressed: false,
+            focused: false,
+            zIndex: 0,
+            windowsID: -1
+        };
+    },
+
+    methods: {
+
+        focus: function focus() {
+            if (!this.focused) {
+                this.focused = true;
+                this.zIndex = this.wm.zIndexCounter();
+            }
+        },
+
+        unfocus: function unfocus() {
+            this.focused = false;
+        },
+
+        onMouseDown: function onMouseDown(event) {
+            this.wm.FocusWindow(this.windowsID);
+        },
+
+        onMouseMove: function onMouseMove(event) {
+            if (this.titleBarPressed) {
+                this.x = event.clientX - this.lastOffset.x, this.y = event.clientY - this.lastOffset.y, this.lastOffset = {
+                    x: event.clientX - this.x,
+                    y: event.clientY - this.y
+                };
+            }
+        },
+
+        onTitleBarMouseDown: function onTitleBarMouseDown(event) {
+            this.titleBarPressed = true;
+            this.lastOffset = {
+                x: event.clientX - this.x,
+                y: event.clientY - this.y
+            };
+
+            this.zIndex = this.wm.zIndexCounter();
+        },
+
+        onTitleBarMouseUp: function onTitleBarMouseUp(event) {
+            this.titleBarPressed = false;
+        }
+
+    }
+};
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(4);
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _WindowsManager = __webpack_require__(5);
+
+var _TextEditor = __webpack_require__(7);
+
+var _FileExplorer = __webpack_require__(13);
 
 /************************ 
  * Author: DZ Chan 
  * Date:   2017-08-12 
  ************************/
 
-var _require = __webpack_require__(5),
+var _require = __webpack_require__(17),
     VirtualLine = _require.VirtualLine;
-
-// import {FileWindow} from "./Files/FileWindow"
-// import {ProgramExecutor} from "./ProgramExecutor/ProgramExecutor"
 
 var measure_font = "船";
 
@@ -600,7 +705,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         el: "#world",
 
         components: {
-            'text-editor': _TextEditor.TextEditorComponent
+            'text-editor': _TextEditor.TextEditorComponent,
+            'file-explorer': _FileExplorer.FileExplorerComponent
         },
 
         data: {
@@ -620,7 +726,76 @@ document.addEventListener("DOMContentLoaded", function (event) {
 });
 
 /***/ }),
-/* 3 */
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.WindowsManager = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Emitter2 = __webpack_require__(6);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************ 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Author: DZ Chan 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Date:   2017-08-12 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ************************/
+
+var WindowsManager = exports.WindowsManager = function (_Emitter) {
+    _inherits(WindowsManager, _Emitter);
+
+    function WindowsManager() {
+        _classCallCheck(this, WindowsManager);
+
+        var _this = _possibleConstructorReturn(this, (WindowsManager.__proto__ || Object.getPrototypeOf(WindowsManager)).call(this));
+
+        _this._id_counter = 0;
+        _this._focused_id = 0;
+
+        var zIndex = 0;
+        _this.zIndexCounter = function () {
+            return zIndex++;
+        };
+        return _this;
+    }
+
+    _createClass(WindowsManager, [{
+        key: "GetZIndexCounter",
+        value: function GetZIndexCounter() {
+            return this.zIndexCounter;
+        }
+    }, {
+        key: "FocusWindow",
+        value: function FocusWindow(id) {
+            this._focused_id = id;
+            this.emit("focusedWindowChanged", id);
+        }
+    }, {
+        key: "GetFocusedId",
+        value: function GetFocusedId() {
+            return this._focused_id;
+        }
+    }, {
+        key: "GetNewId",
+        value: function GetNewId() {
+            return this._id_counter++;
+        }
+    }]);
+
+    return WindowsManager;
+}(_Emitter2.Emitter);
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -673,7 +848,7 @@ var Emitter = exports.Emitter = function () {
 }();
 
 /***/ }),
-/* 4 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -684,7 +859,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.TextEditorComponent = undefined;
 
-var _Window = __webpack_require__(6);
+var _Window = __webpack_require__(2);
 
 var _textEditor = __webpack_require__(11);
 
@@ -712,7 +887,317 @@ var TextEditorComponent = exports.TextEditorComponent = {
 };
 
 /***/ }),
-/* 5 */
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(9);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".unselectable {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none; }\n\n.glowing-border {\n  outline: none;\n  border-color: #9ecaed;\n  box-shadow: 0 0 20px #49afff; }\n\n.window {\n  position: fixed;\n  background-color: white;\n  border-style: solid;\n  border-width: 2px;\n  border-color: white; }\n  .window .titleBar {\n    width: 100%;\n    background-color: lightblue;\n    height: 16px; }\n    .window .titleBar .name {\n      font-size: 14px;\n      color: black;\n      margin: 0px;\n      cursor: default; }\n    .window .titleBar p {\n      line-height: 16px; }\n  .window .right {\n    position: absolute;\n    right: 0px;\n    font-size: 14px;\n    line-height: 16px; }\n  .window .right:hover {\n    background-color: white;\n    color: lightblue; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
+
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(12);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./textEditor.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./textEditor.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".text-editor .toolbar {\n  height: 20px; }\n  .text-editor .toolbar .btn {\n    margin: 2px; }\n  .text-editor .toolbar .btn:hover {\n    background: lightblue; }\n\n.text-editor .real-editor {\n  height: 260px;\n  width: 396px; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.FileExplorerComponent = undefined;
+
+var _Window = __webpack_require__(2);
+
+var _FileItem = __webpack_require__(14);
+
+/************************ 
+ * Author: DZ Chan 
+ * Date:   2017-08-12 
+ ************************/
+
+var template = "<window v-bind:wm=\"wm\" v-bind:title-content=\"titleContent\">\n    <div class=\"pathContainer\">\n        <input type=\"text\" />\n        <div class=\"itemContainer unselectable\" ref=\"fileContainer\">\n\n            <file-item v-for=\"item in items\" \n                v-bind:file-type=\"item.fileType\" \n                v-bind:filename=\"item.filename\" />\n\n        </div>\n    </div>\n</window>";
+
+var FileExplorerComponent = exports.FileExplorerComponent = {
+
+    props: ['wm', 'titleContent'],
+
+    template: template,
+
+    components: {
+        'window': _Window.WindowComponent,
+        'file-item': _FileItem.FileItemComponent
+    },
+
+    data: function data() {
+
+        return {
+            items: [{
+                fileType: 'folder',
+                filename: "home"
+            }, {
+                fileType: 'text',
+                filename: "cdz.txt"
+            }]
+        };
+    }
+
+};
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.FileItemComponent = undefined;
+
+var _file = __webpack_require__(15);
+
+var _file2 = _interopRequireDefault(_file);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var template = '<div class="file-item">\n    <img v-if="fileType == \'folder\'" src="assets/images/Folder-icon.png" class="file-icon" />\n    <img v-else src="assets/images/Text-Document-icon.png" class="file-icon" />\n    <p class="filename">{{ filename }}</p>\n</div>'; /************************ 
+                                                                                                                                                                                                                                                                                 * Author: DZ Chan 
+                                                                                                                                                                                                                                                                                 * Date:   2017-08-12 
+                                                                                                                                                                                                                                                                                 ************************/
+
+var FileItemComponent = exports.FileItemComponent = {
+
+    props: ['fileType', 'filename'],
+
+    template: template
+
+};
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(16);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./file.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./file.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".file-item {\n  display: inline-block;\n  width: 100px;\n  cursor: default; }\n  .file-item .file-icon {\n    width: 100px;\n    height: 100px; }\n  .file-item .filename {\n    color: grey;\n    margin: 0px;\n    text-align: center; }\n\n.file-item:hover {\n  background: lightblue; }\n\n.itemContainer {\n  overflow-y: scroll; }\n\n.pathContainer {\n  width: 100%; }\n  .pathContainer input {\n    width: 99%; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -822,371 +1307,6 @@ var VirtualLine = exports.VirtualLine = function () {
 
     return VirtualLine;
 }();
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.WindowComponent = undefined;
-
-var _main = __webpack_require__(10);
-
-var _main2 = _interopRequireDefault(_main);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var window_template = '<div class="window" ref="frame" :style="{ left: x + \'px\', top: y + \'px\', zIndex: zIndex }"\n    v-on:mousedown="onMouseDown($event)">\n    <div class="titleBar unselectable" ref="titlebar" \n        v-on:mouseup="onTitleBarMouseUp($event)"\n        v-on:mousedown="onTitleBarMouseDown($event)">\n\n        <div class="right">\n            <i class="fa fa-window-close" aria-hidden="true"></i>\n        </div>\n        <p class="name" >{{ titleContent }}</p>\n    </div>\n    <div>\n        <slot />\n    </div>\n</div>'; /************************ 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     * Author: DZ Chan 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     * Date:   2017-08-12 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ************************/
-
-var WindowComponent = exports.WindowComponent = {
-    props: ['wm', 'titleContent'],
-    template: window_template,
-
-    mounted: function mounted() {
-        var _this = this;
-
-        this.zIndex = this.wm.zIndexCounter();
-        this.windowsID = this.wm.GetNewId();
-
-        this.wm.addEventListener("focusedWindowChanged", function (id) {
-            if (id === _this.windowsID) {
-                _this.$refs.frame.focus();
-            } else {
-                _this.unfocus();
-            }
-        });
-        window.addEventListener("mousemove", function (event) {
-            return _this.onMouseMove(event);
-        });
-    },
-
-    data: function data() {
-        return {
-            x: 16,
-            y: 16,
-            width: 400,
-            height: 300,
-            title: "Window",
-            titleBarPressed: false,
-            focused: false,
-            zIndex: 0,
-            windowsID: -1
-        };
-    },
-
-    methods: {
-
-        focus: function focus() {
-            if (!this._focused) {
-                this._focused = true;
-                this.zIndex = this.wm.zIndexCounter();
-                this._dom.classList.add('glowing-border');
-            }
-        },
-
-        unfocus: function unfocus() {
-            this._focused = false;
-            this._dom.classList.remove('glowing-border');
-        },
-
-        onMouseDown: function onMouseDown(event) {
-            this.wm.FocusWindow(this.windowsID);
-        },
-
-        onMouseMove: function onMouseMove(event) {
-            if (this.titleBarPressed) {
-                this.x = event.clientX - this.lastOffset.x, this.y = event.clientY - this.lastOffset.y, this.lastOffset = {
-                    x: event.clientX - this.x,
-                    y: event.clientY - this.y
-                };
-            }
-        },
-
-        onTitleBarMouseDown: function onTitleBarMouseDown(event) {
-            this.titleBarPressed = true;
-            this.lastOffset = {
-                x: event.clientX - this.x,
-                y: event.clientY - this.y
-            };
-
-            this.zIndex = this.wm.zIndexCounter();
-        },
-
-        onTitleBarMouseUp: function onTitleBarMouseUp(event) {
-            this.titleBarPressed = false;
-        }
-
-    }
-};
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.WindowsManager = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _Emitter2 = __webpack_require__(3);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************ 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Author: DZ Chan 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Date:   2017-08-12 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ************************/
-
-var WindowsManager = exports.WindowsManager = function (_Emitter) {
-    _inherits(WindowsManager, _Emitter);
-
-    function WindowsManager() {
-        _classCallCheck(this, WindowsManager);
-
-        var _this = _possibleConstructorReturn(this, (WindowsManager.__proto__ || Object.getPrototypeOf(WindowsManager)).call(this));
-
-        _this._id_counter = 0;
-        _this._focused_id = 0;
-
-        var zIndex = 0;
-        _this.zIndexCounter = function () {
-            return zIndex++;
-        };
-        return _this;
-    }
-
-    _createClass(WindowsManager, [{
-        key: "GetZIndexCounter",
-        value: function GetZIndexCounter() {
-            return this.zIndexCounter;
-        }
-    }, {
-        key: "FocusWindow",
-        value: function FocusWindow(id) {
-            this._focused_id = id;
-            this.emit("focusedWindowChanged", id);
-        }
-    }, {
-        key: "GetFocusedId",
-        value: function GetFocusedId() {
-            return this._focused_id;
-        }
-    }, {
-        key: "GetNewId",
-        value: function GetNewId() {
-            return this._id_counter++;
-        }
-    }]);
-
-    return WindowsManager;
-}(_Emitter2.Emitter);
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".unselectable {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none; }\n\n.glowing-border {\n  outline: none;\n  border-color: #9ecaed;\n  box-shadow: 0 0 20px #49afff; }\n\n.window {\n  position: fixed;\n  background-color: white;\n  border-style: solid;\n  border-width: 2px;\n  border-color: white; }\n  .window .titleBar {\n    width: 100%;\n    background-color: lightblue;\n    height: 16px; }\n    .window .titleBar .name {\n      font-size: 14px;\n      color: black;\n      margin: 0px;\n      cursor: default; }\n    .window .titleBar p {\n      line-height: 16px; }\n  .window .right {\n    position: absolute;\n    right: 0px;\n    font-size: 14px;\n    line-height: 16px; }\n  .window .right:hover {\n    background-color: white;\n    color: lightblue; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".text-editor .toolbar {\n  height: 20px; }\n  .text-editor .toolbar .btn {\n    margin: 2px; }\n  .text-editor .toolbar .btn:hover {\n    background: lightblue; }\n\n.text-editor .real-editor {\n  height: 260px;\n  width: 396px; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(8);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(9);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./textEditor.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./textEditor.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-
-/**
- * When source maps are enabled, `style-loader` uses a link element with a data-uri to
- * embed the css on the page. This breaks all relative urls because now they are relative to a
- * bundle instead of the current page.
- *
- * One solution is to only use full urls, but that may be impossible.
- *
- * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
- *
- * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
- *
- */
-
-module.exports = function (css) {
-  // get current location
-  var location = typeof window !== "undefined" && window.location;
-
-  if (!location) {
-    throw new Error("fixUrls requires window.location");
-  }
-
-	// blank or null?
-	if (!css || typeof css !== "string") {
-	  return css;
-  }
-
-  var baseUrl = location.protocol + "//" + location.host;
-  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
-
-	// convert each url(...)
-	/*
-	This regular expression is just a way to recursively match brackets within
-	a string.
-
-	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
-	   (  = Start a capturing group
-	     (?:  = Start a non-capturing group
-	         [^)(]  = Match anything that isn't a parentheses
-	         |  = OR
-	         \(  = Match a start parentheses
-	             (?:  = Start another non-capturing groups
-	                 [^)(]+  = Match anything that isn't a parentheses
-	                 |  = OR
-	                 \(  = Match a start parentheses
-	                     [^)(]*  = Match anything that isn't a parentheses
-	                 \)  = Match a end parentheses
-	             )  = End Group
-              *\) = Match anything and then a close parens
-          )  = Close non-capturing group
-          *  = Match anything
-       )  = Close capturing group
-	 \)  = Match a close parens
-
-	 /gi  = Get all matches, not the first.  Be case insensitive.
-	 */
-	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
-		// strip quotes (if they exist)
-		var unquotedOrigUrl = origUrl
-			.trim()
-			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
-			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
-
-		// already a full url? no change
-		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
-		  return fullMatch;
-		}
-
-		// convert the url to a full url
-		var newUrl;
-
-		if (unquotedOrigUrl.indexOf("//") === 0) {
-		  	//TODO: should we add protocol?
-			newUrl = unquotedOrigUrl;
-		} else if (unquotedOrigUrl.indexOf("/") === 0) {
-			// path should be relative to the base url
-			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
-		} else {
-			// path should be relative to current directory
-			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
-		}
-
-		// send back the fixed url(...)
-		return "url(" + JSON.stringify(newUrl) + ")";
-	});
-
-	// send back the fixed css
-	return fixedCss;
-};
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(2);
-
 
 /***/ })
 /******/ ]);
