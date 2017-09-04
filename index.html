@@ -16,6 +16,7 @@
             z-index: -10000;
         }
     </style>
+    <script type="text/javascript" src="assets/js/vue-2.4.2/vue.js"></script>
 </head>
 
 <body>
@@ -24,7 +25,9 @@
         <canvas id="main-canvas" />
     </div>
 
-    <div id="world"></div>
+    <div id="world">
+        <text-editor v-bind:wm="wm" title-content="Text Editor" />
+    </div>
 
     <script src="./dist/index.js"></script>
 </body>

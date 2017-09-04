@@ -5,10 +5,9 @@
 
 const {VirtualLine}  = require("./VirtualLine.js")
 import {WindowsManager} from "./Windows/WindowsManager.js"
-import {Window, Component} from "./Windows/Window"
-import {TextEditor} from "./TextEditor/TextEditor"
-import {FileWindow} from "./Files/FileWindow"
-import {ProgramExecutor} from "./ProgramExecutor/ProgramExecutor"
+import {TextEditorComponent} from "./TextEditor/TextEditor"
+// import {FileWindow} from "./Files/FileWindow"
+// import {ProgramExecutor} from "./ProgramExecutor/ProgramExecutor"
 
 const measure_font = "船";
 
@@ -76,24 +75,26 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     let wm = new WindowsManager();
 
-    // ReactDOM.render(<div>
-    //     <TextEditor 
-    //         titleName="Untitled 2"
-    //         windowsManager={wm} />
-    //     <FileWindow 
-    //         titleName="File Manager"
-    //         windowsManager={wm} />
-    //     <ProgramExecutor 
-    //         titleName="ProgramExecutor"
-    //         windowsManager={wm} />
-    // </div>,
-    //     document.getElementById('world'));
-    let my_window = new TextEditor(wm);
-    let pe = new ProgramExecutor(wm);
-    let fw = new FileWindow(wm);
+    new Vue({
 
-    let world = document.getElementById('world');
-    world.appendChild(my_window.dom);
-    world.appendChild(pe.dom);
-    world.appendChild(fw.dom);
+        el: "#world",
+
+        components: {
+            'text-editor': TextEditorComponent,
+        },
+
+        data: {
+            wm: wm,
+        },
+
+    })
+
+    // let my_window = new TextEditor(wm);
+    // let pe = new ProgramExecutor(wm);
+    // let fw = new FileWindow(wm);
+
+    // let world = document.getElementById('world');
+    // world.appendChild(my_window.dom);
+    // world.appendChild(pe.dom);
+    // world.appendChild(fw.dom);
 });
